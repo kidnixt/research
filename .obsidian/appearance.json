@@ -1,7 +1,7 @@
 {
-  "cssTheme": "Cardstock",
+  "cssTheme": "Material Gruvbox",
   "accentColor": "#c85454",
-  "theme": "obsidian",
+  "theme": "moonstone",
   "baseFontSizeAction": true,
   "nativeMenus": false
 }
