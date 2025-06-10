@@ -11,12 +11,10 @@
             "id": "6f93e6151fba7472",
             "type": "leaf",
             "state": {
-              "type": "mk-space",
-              "state": {
-                "path": "1_papers_review"
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "1_papers_review"
+              "title": "New tab"
             }
           }
         ]
@@ -156,13 +154,23 @@
               "icon": "lucide-list",
               "title": "Outline"
             }
+          },
+          {
+            "id": "c66e73aee311373b",
+            "type": "leaf",
+            "state": {
+              "type": "git-view",
+              "state": {},
+              "icon": "git-pull-request",
+              "title": "Source Control"
+            }
           }
-        ]
+        ],
+        "currentTab": 4
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -178,6 +186,8 @@
   },
   "active": "dd1731dc96d83e72",
   "lastOpenFiles": [
+    "Excalidraw/Drawing 2025-06-10 20.10.56.excalidraw.md",
+    "Excalidraw",
     "1_papers_review/1_papers_review.md",
     "0_papers/0_papers.md",
     "README.md",
