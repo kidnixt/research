@@ -11,12 +11,12 @@
             "id": "6f93e6151fba7472",
             "type": "leaf",
             "state": {
-              "type": "mk-space",
+              "type": "pdf",
               "state": {
-                "path": "0_papers"
+                "file": "0_papers/2501.06370v2.pdf"
               },
-              "icon": "lucide-file",
-              "title": "0_papers"
+              "icon": "lucide-file-text",
+              "title": "2501.06370v2"
             }
           }
         ]
@@ -178,6 +178,7 @@
   },
   "active": "6f93e6151fba7472",
   "lastOpenFiles": [
+    "0_papers/2501.06370v2.pdf",
     "1_papers_review/1_papers_review.md",
     "1_papers_review",
     "0_papers/0_papers.md",
