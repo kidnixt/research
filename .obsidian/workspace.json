@@ -13,10 +13,10 @@
             "state": {
               "type": "pdf",
               "state": {
-                "file": "0_papers/2501.06370v2.pdf"
+                "file": "0_papers/braverman2025.pdf"
               },
               "icon": "lucide-file-text",
-              "title": "2501.06370v2"
+              "title": "braverman2025"
             }
           }
         ]
@@ -176,9 +176,9 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "6f93e6151fba7472",
+  "active": "dd1731dc96d83e72",
   "lastOpenFiles": [
-    "0_papers/2501.06370v2.pdf",
+    "0_papers/braverman2025.pdf",
     "1_papers_review/1_papers_review.md",
     "1_papers_review",
     "0_papers/0_papers.md",
