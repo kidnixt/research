@@ -71,7 +71,7 @@
             }
           },
           {
-            "id": "dd1731dc96d83e72",
+            "id": "3bc74e009797d437",
             "type": "leaf",
             "state": {
               "type": "mk-path-view",
@@ -166,11 +166,12 @@
             }
           }
         ],
-        "currentTab": 4
+        "currentTab": 2
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 309.5,
+    "collapsed": true
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -184,7 +185,7 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "dd1731dc96d83e72",
+  "active": "6f93e6151fba7472",
   "lastOpenFiles": [
     "Excalidraw/Drawing 2025-06-10 20.10.56.excalidraw.md",
     "Excalidraw",
