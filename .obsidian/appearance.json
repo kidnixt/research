@@ -1,6 +1,7 @@
 {
-  "cssTheme": "Pink Topaz",
-  "accentColor": "#fd4e57",
+  "cssTheme": "Cardstock",
+  "accentColor": "#c85454",
   "theme": "obsidian",
-  "baseFontSizeAction": true
+  "baseFontSizeAction": true,
+  "nativeMenus": false
 }
