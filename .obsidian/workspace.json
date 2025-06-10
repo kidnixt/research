@@ -13,10 +13,10 @@
             "state": {
               "type": "mk-space",
               "state": {
-                "path": "Tags"
+                "path": "0_papers"
               },
               "icon": "lucide-file",
-              "title": "Tags"
+              "title": "0_papers"
             }
           }
         ]
@@ -176,8 +176,12 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "dd1731dc96d83e72",
+  "active": "6f93e6151fba7472",
   "lastOpenFiles": [
+    "1_papers_review/1_papers_review.md",
+    "1_papers_review",
+    "0_papers/0_papers.md",
+    "0_papers",
     "Tags"
   ]
 }

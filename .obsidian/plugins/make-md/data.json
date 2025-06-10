@@ -39,7 +39,8 @@
   "deleteFileOption": "trash",
   "expandedSpaces": [
     "//Tags",
-    "/"
+    "/",
+    "//0_papers"
   ],
   "expandFolderOnClick": true,
   "spacesFolder": "Tags",
