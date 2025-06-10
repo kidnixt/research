@@ -1,5 +1,6 @@
 {
-  "cssTheme": "Primary",
-  "accentColor": "",
-  "theme": "obsidian"
+  "cssTheme": "Pink Topaz",
+  "accentColor": "#fd4e57",
+  "theme": "obsidian",
+  "baseFontSizeAction": true
 }
