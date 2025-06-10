@@ -1,7 +1,7 @@
 {
-  "cssTheme": "Material Gruvbox",
-  "accentColor": "#c85454",
-  "theme": "moonstone",
+  "cssTheme": "Pink Topaz",
+  "accentColor": "#641b1b",
+  "theme": "obsidian",
   "baseFontSizeAction": true,
   "nativeMenus": false
 }
