@@ -28,5 +28,10 @@ Se necesita **entender el comportamiento del sistema.** En el ámbito de ingenie
 --- 
 
 La propuesta central es:
-1. Identificar qué partes del sistema están usando LLMs para transformar información (los **Transfere**)
+1. Identificar qué partes del sistema están usando LLMs para transformar información (los **Transference Models**, TMs).
+2. Luego, hay que modelar no las salidas en sí, sino la **distribución de probabilidad sobre clases de significados equivalentes** (lo que llaman *meaning classes*).
+
+Si entendés cómo el LLM reparte probabilidad entre interpretaciones posibles, podemos analizar y mejorar el sistema.
+
+
 
