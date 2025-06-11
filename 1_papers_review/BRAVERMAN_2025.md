@@ -43,5 +43,15 @@ Si el modelo da una respuesta equivocada **con alta confianza** (concentración 
 > Cuando el modelo se equivoca con confianza, dice mucho sobre sus puntos débiles y se puede usar eso para mejorar(lo).
 
 
+### Mis preguntitas:
+
+- El agrupamiento de clases, no depende muchísimo de la tarea??
+- Si una tarea no tiene una única "clase correcta", cómo se define la alineación??
+- Es viable para tareas con millones de posibles salidas?
+
+## Preliminares
+
+### 
+
 
 
