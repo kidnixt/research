@@ -41,8 +41,8 @@
     "//Tags",
     "/",
     "//Excalidraw",
-    "//1_papers_review",
-    "//0_papers"
+    "//0_papers",
+    "//1_papers_review"
   ],
   "expandFolderOnClick": true,
   "spacesFolder": "Tags",
