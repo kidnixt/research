@@ -14,4 +14,8 @@
 
 ## Introducción
 
-Los LLMs (como GPT-4 y Gemini) funcionan muy bien en muchas tareas gracias a que pueden seguir instrucciones (*"instruction following"*)
+Los LLMs (como GPT-4 y Gemini) funcionan muy bien en muchas tareas gracias a que pueden seguir instrucciones (*"instruction following"*) y aprender del contexto. Esto incluye estrategias como:
+- **Zero-shot:** Darle una instrucción y esperar que entiende qué hacer sin ejemplos.
+- **Few-shot:** Darle algunos ejemplos en el prompt.
+
+Esta flexibilidad hace que los LLMs se usen cada vez más en aplicaciones reales (*downstream tasks* = tareas derivadas), simplemente dándoles prompts. La **alucinación**, es uno de los principales problemas que esto trae. Esto es, que e
