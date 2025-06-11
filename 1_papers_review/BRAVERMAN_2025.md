@@ -20,4 +20,13 @@ Los LLMs (como GPT-4 y Gemini) funcionan muy bien en muchas tareas gracias a que
 
 Esta flexibilidad hace que los LLMs se usen cada vez más en aplicaciones reales (*downstream tasks* = tareas derivadas), simplemente dándoles prompts. La **alucinación**, es uno de los principales problemas que esto trae. Esto es, el modelo genera cosas que suenan bien, pero son falsas o inválidas. 
 
-Se necesita **entender el comportamiento del sistema.** 
+Se necesita **entender el comportamiento del sistema.** En el ámbito de ingeniería de software (de estas cosas), el comportamiento estocástico del modelo es visto más como un problema (por ejemplo, tests que fallan a veces y otras no: *flaky tests*), y no como algo que se pueda analizar o aprovechar
+
+---
+⚠️ Se está ignorando que el LLM no da una sola respuesta, sino una **distribución sobre muchas posibles**??
+
+--- 
+
+La propuesta central es:
+1. Identificar qué partes del sistema están usando LLMs para transformar información (los **Transfere**)
+
