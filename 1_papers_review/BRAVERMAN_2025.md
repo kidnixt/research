@@ -14,3 +14,4 @@
 
 ## Introducción
 
+Los LLMs (como GPT-4 y Gemini) funcionan muy bien en muchas tareas gracias a que pueden seguir instrucciones (*"instruction following"*)
