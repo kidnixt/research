@@ -53,5 +53,48 @@ Si el modelo da una respuesta equivocada **con alta confianza** (concentración 
 
 ### Large Language Models
 
+**¿Qué es un LLM desde el punto de vista técnico?**
+
+Desde el punto de vista técnico, un LLM, básicamente es una **función probabilística paramétrica**. Es decir:
+- Toma un input $x$ (un texto anterior, también llamado "contexto").
+- Y devuelve una distribución de probabilidad sobre posibles próximos tokens $t_k$:
+$$ P(t_k | x)$$ Esto significa que el modelo no genera "una respuesta", sino una **distribución sobre todas las respuestas posibles,** token por token.
+
+---
+
+ **¿Cómo se entrena un LLM?**
+
+A través de _next-token prediction_ (predicción del próximo token). Se entrena con **corpus masivos** de texto, ajustando sus parámetros para minimizar un error (usualmente entropía cruzada) entre:
+
+- lo que el modelo predice como próximo token, y
+- lo que realmente sigue en el texto de entrenamiento.
+
+⚠️ Esto refuerza la idea de que el modelo aprende **probabilidades de continuación**, no reglas explícitas o verdades lógicas.
+
+---
+**¿Cómo se usa un LLM en la práctica?**
+
+Una vez entrenado, el modelo puede usarse para generar texto. Para hacerlo, necesita un **decoding strategy**, como:
+
+- _Greedy_: elige siempre el token más probable.
+- _Sampling_: elige aleatoriamente según la distribución.
+- _Top-k_ / _Top-p_: limita la elección a los tokens más probables.
+- _Temperature_: controla cuán "creativo" es el modelo (más temperatura = más aleatoriedad).
+
+Esto es crucial porque **el mismo input puede generar diferentes salidas** si el decoding es estocástico.
+
+---
+**Conexión con el paper**
+
+Los autores enfatizan que si bien muchas aplicaciones usan el LLM como una caja negra, ellos quieren **modelar esta distribución** para entender el comportamiento del sistema. No les interesa solo “qué salida dio”, sino:
+
+> **¿Con qué probabilidad eligió esa salida sobre otras posibles equivalentes?**
+
+Esto los lleva a analizar _distribuciones sobre clases semánticas_, no solo sobre tokens.
 
 
+### Autoformalization
+
+**¿Qué es la autoformalización?**
+
+Autoformalización es el proceso de **convertir texton**
