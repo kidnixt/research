@@ -51,7 +51,7 @@ Si el modelo da una respuesta equivocada **con alta confianza** (concentración 
 
 ## Preliminares
 
-### Large Language Models
+### A. Large Language Models
 
 **¿Qué es un LLM desde el punto de vista técnico?**
 
@@ -93,7 +93,7 @@ Los autores enfatizan que si bien muchas aplicaciones usan el LLM como una caja 
 Esto los lleva a analizar _distribuciones sobre clases semánticas_, no solo sobre tokens.
 
 
-### Autoformalization
+### B .Autoformalization
 
 **¿Qué es la autoformalización?**
 
@@ -144,7 +144,7 @@ Es el **caso de estudio** principal que se usa para aplicar el marco probabilís
 
 ![[Pasted image 20250613102054.png]]
 
-### Transference Models (TMs)
+### C. Transference Models (TMs)
 
 **¿Qué es un Transference Model?**
 
@@ -213,3 +213,11 @@ $$T(i, \cdot) = \text{una distribución de probabilidad sobre salidas }o \text{ 
 En otras palabras: **el TM actúa como una caja negra estocástica** que recibe una entrada y escupe una distribución sobre posibles resultados.
 
 Lo que ellos proponen es: **muestrear esta caja negra** muchas veces con el mismo input, agrupar las salidas en clases de significado equivalentes y analizar esa distribución.
+
+### D. Distribution over Semantic Domains
+
+Dado que los LLMs son funciones de estimación de densidad sobre secuencias de tokens, los autores coinciden con otros trabajos que la probabilidad debería considerarse asignada a conceptos, no a cadenas de texto. Muchas veces hay múltiples (incluso infinitas) cadenas que representan una misma idea (por ejemplo, especificaciones lógicamente equivalentes). En teoría, esos corresponde a sumar las probabilidades asignadas a todas las cadenas dentro de cada clase de equivalencia. 
+
+**¿Cuál es el problema de trabajar con cadenas de texto?**
+
+Los LLMs predicen secuencias de tokens (palabras o símbolos).
