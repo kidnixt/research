@@ -261,12 +261,81 @@ Porque al trabajar con LLMs:
 Este cambio de perspectiva es **clave** para su marco probabilístico. Les permite:
 
 - Medir correctamente alineación con la verdad.
-    
 - Detectar errores semánticos aunque el texto “suene bien”.
-    
 - Evaluar si el modelo es “confuso” o “seguro” semánticamente, no solo superficialmente.
 
 
 ### E. Computing Empirical Distributions of TMs
 
-Dado que los TMs se comportan como procesos estocásticos y no siempre se tiene acceso directo a las probabildiades 
+Dado que los TMs se comportan como procesos estocásticos y no siempre se tiene acceso directo a las probabilidades del *next-token*, se propone aproximar la distribución de salidas del TM usando una distribución categórica empírica sobre las *meaning classes*. Estas clases se obtiene **re-ejecutando** el TM múltiples veces con el mismo input y agrupando las salidas segun una relación de equivalencai semántica (por ejemplo, usando un SMT solver).
+
+---
+
+**¿Qué problemas enfrentan?**
+
+Idealmente, para cada input $i$, querríamos conocer la distribucion completa $P(o | i)$, es decir, cuánta probabilidad asigna el TM a cada posible output. Pero eso **no es accesible directamente** por varias razones:
+
+- La mayoría de las APIs de LLM **no exponen la distribución completa de tokens.**
+- Incluso si lo hicieran, reconstruir la distribución sobre *meaning classes*, supongo yo es **incomputable**.
+- El espacio de posibles salidas $o \in \mathcal{O}$ es **enorme o infinito**, especialmente si se cuenta texto natural. 
+
+---
+
+**¿Qué solución proponen?**
+
+Usar una **distribución empírica** construida por muestreo:
+
+1. Se re-ejecuta el TM varias veces con la **misma entrada** $i$. ⚠️ Cada ejecución genera una salida distinta por el carácter estocástico del LLM (sampling, temperatura, etc.).
+2. Se recolectan todas las salidas $o_1, o_2, \dots, o_n$.
+3. Se agrupan esas salidaas en **clases semánticamente equivalentes**— _meaning classes_ 
+	1. En autoformalización, esto se hace verificando **equivalencia lógica** de las pre/post condiciones generadas.
+	2. Si dos salidas son equivalentes según un STM solver, pertenencen a la msima clase.
+4. Se cuenta cuántas veces apareció cada clase. Eso forma una **distribución categórica empírica:**
+
+$$\hat{P}_i(c) = \frac{\text{\# de veces que se generó la clase } c}{\text{total de ejecuciones}}$$
+
+
+---
+**¿Cómo se agrupan las salidas?**
+
+Esto depende fuertemente de la tarea. En autoformalización, dos especificaciones son equivalentes si:
+
+- Tienen la misma **semántica lógica** (no importa si están escritas distinto).
+- Esto se evalúa usando **SMT solvers** (como Z3 o el backend de Dafny).
+
+📌 Importante: si la salida tiene **error sintáctico**, se considera su propia clase (no se agrupa con ninguna otra).
+
+---
+
+**¿Qué significa "comportamiento estocástico del TM"?**
+
+El TM puede comportarse como una caja negra:  
+Cada vez que le das un input iii, responde con una salida diferente ooo, dependiendo de:
+
+- El modelo base (GPT, Gemini, etc.).
+- El prompt.
+- Los hiperparámetros del decoding (temperatura, top-k, etc.).
+
+Entonces, lo modelan como un **proceso aleatorio**:  
+Repetís muchas veces y ves qué patrones emergen.
+
+Esto también permite estudiar **certeza del modelo**: si siempre responde igual, hay concentración; si reparte entre muchas clases, hay dispersión.
+
+---
+
+**¿Por qué es importante este paso?**
+
+Porque **toda la evaluación de alineación y concentración** se basa en esta distribución empírica:
+
+- Si la clase correcta tiene la mayor frecuencia ⇒ **distribución alineada.**
+- Si una clase incorrecta domina ⇒ **concentración pero desalineada (peligroso).**
+- Si la distribución está dispersa ⇒ **incertidumbre o ambigüedad**
+
+---
+
+#### Mis Preguntitas:
+
+- ¿Cuántas muestras son suficientes para estimar bien la distribución? (En el estudio usan 30).
+- ¿Qué pasa si el solver SMT falla o es muy lento? ¿Cómo escalar esto?
+- ¿Cómo definir equivalencia semántica en tareas donde no hay lógica formal?
+- ¿Qué impacto tienen los hiperparámetros del LLM (p. ej. temperatura = 0.7 vs. 1.0) sobre la distribución?
