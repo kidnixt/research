@@ -97,4 +97,65 @@ Esto los lleva a analizar _distribuciones sobre clases semánticas_, no solo sob
 
 **¿Qué es la autoformalización?**
 
-Autoformalización es el proceso de **convertir texton**
+Autoformalización es el proceso de **convertir texto natural en especificaciones formales.** Es decir, traducir algo como:
+
+> `"""Devuelve el índice del primer elemento igual a x en el array."""`
+
+en algo como (en lenguaje formal como **Dafny**)
+
+``` dafny
+requires a != null
+ensures forall i :: 0 <= i < result ==> a[i] != x
+ensures a[result] == x
+```
+
+Esta tarea requiere **comprensión semántica**, **capacidad de inferencia lógica** y conocimiento del dominio del código. No es simplemente traducir palabra por palabra.
+
+
+---
+**¿Por qué es importante?**
+
+Porque automatizar esta transformación ayuda a tareas críticas como:
+
+- **Verificación automática de programas** (probar que el código cumple con lo especificado).
+- **Pruebas formales** (testings guiados por propiedades).
+- **Documentación ejecutable** (donde los comentarios se vuelven parte verificable del programa).
+
+Esta es una **tarea dura**, tradicionalmente realizada por expertos. Usar LLMs para esto es ambicioso, pero también muy prometedor.
+
+---
+
+**¿Por qué eligieron Dafny?**
+
+- Dafny es un lenguaje diseñado para **verificación automática** de programas, con soporte para precondiciones, postcondiciones, invariantes, etc.
+- Tiene un **verificador SMT incorporado**, que permite comprobar si las condiciones formales son lógicamente correctas.
+- Es usado frecuentemente en papers académicos para tareas de autoformalización y synthesis.
+
+Además, como el objetivo del paper es evaluar distribuciones sobre significados formales, usar Dafny permite chequear automáticamente **equivalencia semántica** entre dos especificaciones (vía SMT).
+
+---
+**¿Qué rol juega esta tarea en el paper?**
+
+Es el **caso de estudio** principal que se usa para aplicar el marco probabilístico. Todo el análisis (alineación, concentración, mejoras al TM) se ilustra a partir de esta tarea. Lo interesante es que:
+
+- La tarea tiene un **ground truth claro** (las especificaciones correctas están dadas).
+- Se puede generar muchas salidas (por el LLM) y verificar si son **equivalentes** entre sí.
+- Es posible categorizar errores comunes (por ejemplo, _postcondición débil_, _omisión de propiedad clave_, _error de sintaxis_).
+
+### Transference Models (TMs)
+
+**¿Qué es un Transference Model?**
+
+Es una **abstracción de ingeniería de software** que encapsula cómo un sistema basado en LLM **transforma inputs en outputs** para una tarea particular.
+
+- Es una **unidad funcional** dentro de un sistema más grande.
+- Se apoya en un LLM para llevar a cabo una transformación (por ejemplo: docstring -> especificación Dafny).
+- Puede ser tan simple como un prompt, o más complejo (con herramientas externas, reintentos, submódulos, etc)
+
+``` python 
+def doc2spec(docstring):
+    prompt = "Given this docstring, write the pre/post conditions: " + docstring
+    return LLM(prompt)
+
+```
+
