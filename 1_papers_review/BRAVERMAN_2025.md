@@ -142,6 +142,8 @@ Es el **caso de estudio** principal que se usa para aplicar el marco probabilís
 - Se puede generar muchas salidas (por el LLM) y verificar si son **equivalentes** entre sí.
 - Es posible categorizar errores comunes (por ejemplo, _postcondición débil_, _omisión de propiedad clave_, _error de sintaxis_).
 
+![[Pasted image 20250613102054.png]]
+
 ### Transference Models (TMs)
 
 **¿Qué es un Transference Model?**
@@ -164,7 +166,7 @@ Este `doc2spec` sería un **TM**.
 **¿Por qué los TMs son estocásticos?**
 
 Porque dependen de un LLM, y los LLMs son modelos **probabilisticos:** Dada una entrada $i$, el LLM puede producir distintas salidos $o$, cada una con una probabilidad. Formalmente:
-$$T: I \times O \rightarrow \mathbb{R} \quad\text{donde}\quad T(i,o) = P(o|i)$$
+$$T: \mathcal{I} \times \mathcal{O} \rightarrow \mathbb{R} \quad\text{donde}\quad T(i,o) = P(o|i)$$
 
 O sea, el TM **define una distribución** sobre salidas posibles para cada entrada. Esto depende fuertemente de:
 - El LMM usado.
@@ -207,4 +209,7 @@ Entonces el **objeto de análisis** del paper no es el modelo GPT o Gemini, sino
 
 Para reforzar: el TM se modela como una función probabilística:
 
-$$T(i, \cdot$$
+$$T(i, \cdot) = \text{una distribución de probabilidad sobre salidas }o \text{ dado un input } i  $$
+En otras palabras: **el TM actúa como una caja negra estocástica** que recibe una entrada y escupe una distribución sobre posibles resultados.
+
+Lo que ellos proponen es: **muestrear esta caja negra** muchas veces con el mismo input, agrupar las salidas en clases de significado equivalentes y analizar esa distribución.

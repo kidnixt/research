@@ -38,11 +38,9 @@
   "vaultSelector": true,
   "deleteFileOption": "trash",
   "expandedSpaces": [
-    "//Tags",
     "/",
     "//Excalidraw",
-    "//0_papers",
-    "//1_papers_review"
+    "//Tags"
   ],
   "expandFolderOnClick": true,
   "spacesFolder": "Tags",
