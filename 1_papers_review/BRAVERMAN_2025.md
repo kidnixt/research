@@ -156,6 +156,55 @@ Es una **abstracción de ingeniería de software** que encapsula cómo un sistem
 def doc2spec(docstring):
     prompt = "Given this docstring, write the pre/post conditions: " + docstring
     return LLM(prompt)
-
 ```
 
+Este `doc2spec` sería un **TM**.
+
+---
+**¿Por qué los TMs son estocásticos?**
+
+Porque dependen de un LLM, y los LLMs son modelos **probabilisticos:** Dada una entrada $i$, el LLM puede producir distintas salidos $o$, cada una con una probabilidad. Formalmente:
+$$T: I \times O \rightarrow \mathbb{R} \quad\text{donde}\quad T(i,o) = P(o|i)$$
+
+O sea, el TM **define una distribución** sobre salidas posibles para cada entrada. Esto depende fuertemente de:
+- El LMM usado.
+- El prompt.
+- La **estrategia de decodificación** (ej. sampling con temperatura, top-k, etc).
+
+---
+
+**¿Qué incluye un TM?**
+
+Un TM puede incluir no solo el llamado al LLM, sino también:
+
+- **Preprocesamiento** de la entrada (por ejemplo, limpiar el docstring).
+- **Razonamiento externo** (RAG, vectores, heurísticas).
+- **Postprocesamiento** (validar la salida con el compilador).
+- **Loops correctivos**, donde se itera sobre la salida si hubo errores.
+- **Cadena de TMs** (uno genera una subparte, otro compone, etc.).
+
+En el paper, muestran un **TM con múltiples etapas**:
+
+1. Prompt inicial para generar la especificación.
+2. Si Dafny da error, se corrige usando el mensaje del compilador.
+3. Además, usan un paso estilo RAG para buscar ejemplos similares (doc2vec + retrieval).
+
+---
+
+**¿Por qué es tan importante este concepto?**
+
+Porque los autores **NO** están interesados en estudiar al LLM directamente, sino en estudiar **los sistemas construidos con LLMs**. Es decir:
+
+> "El LLM no es el sistema, sino una parte de un módulo más grande que transforma datos para una tarea."
+
+Entonces el **objeto de análisis** del paper no es el modelo GPT o Gemini, sino el **TM** como componente de software. El marco propuesto evalúa cómo el TM se comporta probabilísticamente:
+- Genera siempre la salida correcta?
+- Qué tanta certeza tiene?
+- Hay errores frecuentes con alta probabilidad?
+
+---
+**Modelo funcional formal**
+
+Para reforzar: el TM se modela como una función probabilística:
+
+$$T(i, \cdot$$
