@@ -12,7 +12,7 @@
 > Los sistemas que usan LLMs son díficiles de verificar y depurar. Proponen un enfoque no analiza solo las respuesta, sino la distribución de probabilidad **sobre clases semánticas**. Esto los ayuda a identificar errores sistemáticos, como respuestas incorrectas con alta confianza. Lo ilustran con el problema de transformar lenguaje natural en especificaciones formales (*autoformalización*). 
 
 
-## Introducción
+## I. Introducción
 
 Los LLMs (como GPT-4 y Gemini) funcionan muy bien en muchas tareas gracias a que pueden seguir instrucciones (*"instruction following"*) y aprender del contexto. Esto incluye estrategias como:
 - **Zero-shot:** Darle una instrucción y esperar que entiende qué hacer sin ejemplos.
@@ -49,11 +49,11 @@ Si el modelo da una respuesta equivocada **con alta confianza** (concentración 
 - Si una tarea no tiene una única "clase correcta", cómo se define la alineación??
 - Es viable para tareas con millones de posibles salidas?
 
-## Preliminares
+## II. Preliminares
 
 ### A. Large Language Models
 
-**¿Qué es un LLM desde el punto de vista técnico?**
+#### ¿Qué es un LLM desde el punto de vista técnico?
 
 Desde el punto de vista técnico, un LLM, básicamente es una **función probabilística paramétrica**. Es decir:
 - Toma un input $x$ (un texto anterior, también llamado "contexto").
@@ -62,7 +62,7 @@ $$ P(t_k | x)$$ Esto significa que el modelo no genera "una respuesta", sino una
 
 ---
 
- **¿Cómo se entrena un LLM?**
+#### ¿Cómo se entrena un LLM?
 
 A través de _next-token prediction_ (predicción del próximo token). Se entrena con **corpus masivos** de texto, ajustando sus parámetros para minimizar un error (usualmente entropía cruzada) entre:
 
@@ -72,7 +72,7 @@ A través de _next-token prediction_ (predicción del próximo token). Se entren
 ⚠️ Esto refuerza la idea de que el modelo aprende **probabilidades de continuación**, no reglas explícitas o verdades lógicas.
 
 ---
-**¿Cómo se usa un LLM en la práctica?**
+#### ¿Cómo se usa un LLM en la práctica?
 
 Una vez entrenado, el modelo puede usarse para generar texto. Para hacerlo, necesita un **decoding strategy**, como:
 
@@ -84,7 +84,7 @@ Una vez entrenado, el modelo puede usarse para generar texto. Para hacerlo, nece
 Esto es crucial porque **el mismo input puede generar diferentes salidas** si el decoding es estocástico.
 
 ---
-**Conexión con el paper**
+#### Conexión con el paper
 
 Los autores enfatizan que si bien muchas aplicaciones usan el LLM como una caja negra, ellos quieren **modelar esta distribución** para entender el comportamiento del sistema. No les interesa solo “qué salida dio”, sino:
 
@@ -95,7 +95,7 @@ Esto los lleva a analizar _distribuciones sobre clases semánticas_, no solo sob
 
 ### B .Autoformalization
 
-**¿Qué es la autoformalización?**
+#### ¿Qué es la autoformalización?
 
 Autoformalización es el proceso de **convertir texto natural en especificaciones formales.** Es decir, traducir algo como:
 
@@ -113,7 +113,7 @@ Esta tarea requiere **comprensión semántica**, **capacidad de inferencia lógi
 
 
 ---
-**¿Por qué es importante?**
+#### ¿Por qué es importante?
 
 Porque automatizar esta transformación ayuda a tareas críticas como:
 
@@ -125,7 +125,7 @@ Esta es una **tarea dura**, tradicionalmente realizada por expertos. Usar LLMs p
 
 ---
 
-**¿Por qué eligieron Dafny?**
+#### ¿Por qué eligieron Dafny?
 
 - Dafny es un lenguaje diseñado para **verificación automática** de programas, con soporte para precondiciones, postcondiciones, invariantes, etc.
 - Tiene un **verificador SMT incorporado**, que permite comprobar si las condiciones formales son lógicamente correctas.
@@ -134,7 +134,7 @@ Esta es una **tarea dura**, tradicionalmente realizada por expertos. Usar LLMs p
 Además, como el objetivo del paper es evaluar distribuciones sobre significados formales, usar Dafny permite chequear automáticamente **equivalencia semántica** entre dos especificaciones (vía SMT).
 
 ---
-**¿Qué rol juega esta tarea en el paper?**
+#### ¿Qué rol juega esta tarea en el paper?
 
 Es el **caso de estudio** principal que se usa para aplicar el marco probabilístico. Todo el análisis (alineación, concentración, mejoras al TM) se ilustra a partir de esta tarea. Lo interesante es que:
 
@@ -146,7 +146,7 @@ Es el **caso de estudio** principal que se usa para aplicar el marco probabilís
 
 ### C. Transference Models (TMs)
 
-**¿Qué es un Transference Model?**
+#### ¿Qué es un Transference Model?
 
 Es una **abstracción de ingeniería de software** que encapsula cómo un sistema basado en LLM **transforma inputs en outputs** para una tarea particular.
 
@@ -163,7 +163,7 @@ def doc2spec(docstring):
 Este `doc2spec` sería un **TM**.
 
 ---
-**¿Por qué los TMs son estocásticos?**
+#### ¿Por qué los TMs son estocásticos?
 
 Porque dependen de un LLM, y los LLMs son modelos **probabilisticos:** Dada una entrada $i$, el LLM puede producir distintas salidos $o$, cada una con una probabilidad. Formalmente:
 $$T: \mathcal{I} \times \mathcal{O} \rightarrow \mathbb{R} \quad\text{donde}\quad T(i,o) = P(o|i)$$
@@ -175,7 +175,7 @@ O sea, el TM **define una distribución** sobre salidas posibles para cada entra
 
 ---
 
-**¿Qué incluye un TM?**
+#### ¿Qué incluye un TM?
 
 Un TM puede incluir no solo el llamado al LLM, sino también:
 
@@ -193,7 +193,7 @@ En el paper, muestran un **TM con múltiples etapas**:
 
 ---
 
-**¿Por qué es tan importante este concepto?**
+#### ¿Por qué es tan importante este concepto?
 
 Porque los autores **NO** están interesados en estudiar al LLM directamente, sino en estudiar **los sistemas construidos con LLMs**. Es decir:
 
@@ -205,7 +205,7 @@ Entonces el **objeto de análisis** del paper no es el modelo GPT o Gemini, sino
 - Hay errores frecuentes con alta probabilidad?
 
 ---
-**Modelo funcional formal**
+#### Modelo funcional formal
 
 Para reforzar: el TM se modela como una función probabilística:
 
@@ -214,11 +214,12 @@ En otras palabras: **el TM actúa como una caja negra estocástica** que recibe 
 
 Lo que ellos proponen es: **muestrear esta caja negra** muchas veces con el mismo input, agrupar las salidas en clases de significado equivalentes y analizar esa distribución.
 
+---
 ### D. Distribution over Semantic Domains
 
 Dado que los LLMs son funciones de estimación de densidad sobre secuencias de tokens, los autores coinciden con otros trabajos que la probabilidad debería considerarse asignada a conceptos, no a cadenas de texto. Muchas veces hay múltiples (incluso infinitas) cadenas que representan una misma idea (por ejemplo, especificaciones lógicamente equivalentes). En teoría, esos corresponde a sumar las probabilidades asignadas a todas las cadenas dentro de cada clase de equivalencia. 
 
-**¿Cuál es el problema de trabajar con cadenas de texto?**
+#### ¿Cuál es el problema de trabajar con cadenas de texto?
 
 Los LLMs predicen secuencias de tokens (palabras o símbolos). Eso genera una **distribución sobre strings como:**
 
@@ -234,7 +235,7 @@ Los LLMs predicen secuencias de tokens (palabras o símbolos). Eso genera una **
 
 ---
 
-**¿Qué proponen entonces?**
+#### ¿Qué proponen entonces?
 
 Agrupar las salidas en **clases semánticas equivalentes** (lo que llaman *meaning classes*). Cada clase agrupa todas las salidas que, aunque tengan forma distinta, expresan la **misma idea.** Por ejemplo si dos fórmulas Dafny dicen: 
 
@@ -250,7 +251,7 @@ Estas pueden considerarse **semánticamente equivalentes** (si ambas implican lo
 
 $$P(\text{clase}) = \sum_{\text{strings en la clase}} P(\text{string})$$
 ---
-**¿Por qué este punto es crucial?**
+#### ¿Por qué este punto es crucial?
 
 Porque al trabajar con LLMs:
 - El modelo puede generar miles de variantes textuales **de una misma respuesta semántica**
@@ -264,14 +265,14 @@ Este cambio de perspectiva es **clave** para su marco probabilístico. Les permi
 - Detectar errores semánticos aunque el texto “suene bien”.
 - Evaluar si el modelo es “confuso” o “seguro” semánticamente, no solo superficialmente.
 
-
+---
 ### E. Computing Empirical Distributions of TMs
 
 Dado que los TMs se comportan como procesos estocásticos y no siempre se tiene acceso directo a las probabilidades del *next-token*, se propone aproximar la distribución de salidas del TM usando una distribución categórica empírica sobre las *meaning classes*. Estas clases se obtiene **re-ejecutando** el TM múltiples veces con el mismo input y agrupando las salidas segun una relación de equivalencai semántica (por ejemplo, usando un SMT solver).
 
 ---
 
-**¿Qué problemas enfrentan?**
+#### ¿Qué problemas enfrentan?
 
 Idealmente, para cada input $i$, querríamos conocer la distribucion completa $P(o | i)$, es decir, cuánta probabilidad asigna el TM a cada posible output. Pero eso **no es accesible directamente** por varias razones:
 
@@ -281,7 +282,7 @@ Idealmente, para cada input $i$, querríamos conocer la distribucion completa $P
 
 ---
 
-**¿Qué solución proponen?**
+#### ¿Qué solución proponen?
 
 Usar una **distribución empírica** construida por muestreo:
 
@@ -293,10 +294,10 @@ Usar una **distribución empírica** construida por muestreo:
 4. Se cuenta cuántas veces apareció cada clase. Eso forma una **distribución categórica empírica:**
 
 $$\hat{P}_i(c) = \frac{\text{\# de veces que se generó la clase } c}{\text{total de ejecuciones}}$$
-
+Esta es la distribución sobre **conceptos**, no sobre cadenas de texto.
 
 ---
-**¿Cómo se agrupan las salidas?**
+#### ¿Cómo se agrupan las salidas?
 
 Esto depende fuertemente de la tarea. En autoformalización, dos especificaciones son equivalentes si:
 
@@ -307,7 +308,7 @@ Esto depende fuertemente de la tarea. En autoformalización, dos especificacione
 
 ---
 
-**¿Qué significa "comportamiento estocástico del TM"?**
+#### ¿Qué significa "comportamiento estocástico del TM"?
 
 El TM puede comportarse como una caja negra:  
 Cada vez que le das un input iii, responde con una salida diferente ooo, dependiendo de:
@@ -323,7 +324,7 @@ Esto también permite estudiar **certeza del modelo**: si siempre responde igual
 
 ---
 
-**¿Por qué es importante este paso?**
+#### ¿Por qué es importante este paso? 
 
 Porque **toda la evaluación de alineación y concentración** se basa en esta distribución empírica:
 
@@ -332,10 +333,13 @@ Porque **toda la evaluación de alineación y concentración** se basa en esta d
 - Si la distribución está dispersa ⇒ **incertidumbre o ambigüedad**
 
 ---
-
 #### Mis Preguntitas:
 
 - ¿Cuántas muestras son suficientes para estimar bien la distribución? (En el estudio usan 30).
 - ¿Qué pasa si el solver SMT falla o es muy lento? ¿Cómo escalar esto?
 - ¿Cómo definir equivalencia semántica en tareas donde no hay lógica formal?
 - ¿Qué impacto tienen los hiperparámetros del LLM (p. ej. temperatura = 0.7 vs. 1.0) sobre la distribución?
+
+---
+
+## III.  The Framework 
