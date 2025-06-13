@@ -343,3 +343,19 @@ Porque **toda la evaluación de alineación y concentración** se basa en esta d
 ---
 
 ## III.  The Framework 
+### A. Assumptions, Hypothesis and Rationale
+
+### B. Defining Improvement
+
+## IV. Illustrative Results on Autoformalization
+
+### Table I
+### Table II
+
+### Table III
+
+## V. Related Work
+
+## VI. Conclusions and Future Work
+
+### A. The Case of Agentic AI
