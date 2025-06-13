@@ -220,4 +220,53 @@ Dado que los LLMs son funciones de estimación de densidad sobre secuencias de t
 
 **¿Cuál es el problema de trabajar con cadenas de texto?**
 
-Los LLMs predicen secuencias de tokens (palabras o símbolos).
+Los LLMs predicen secuencias de tokens (palabras o símbolos). Eso genera una **distribución sobre strings como:**
+
+```
+"Returns the index of x" → 20%  
+"Find the position of x" → 18%  
+"Locate x in the array" → 12%  
+```
+
+**Pero** estas cadenas pueden tener el **mismo significado**, aunque estén escritas distinto, entonces:
+
+> Analizar solo la cadena más frecuente o el token más probable es **insuficiente** para entender qué está "pensando" el modelo.
+
+---
+
+**¿Qué proponen entonces?**
+
+Agrupar las salidas en **clases semánticas equivalentes** (lo que llaman *meaning classes*). Cada clase agrupa todas las salidas que, aunque tengan forma distinta, expresan la **misma idea.** Por ejemplo si dos fórmulas Dafny dicen: 
+
+``` dafny
+ensures exists i :: a[i] == x && forall j < i :: a[j] != x
+```
+
+``` dafny
+ensures the returned index is the first occurrence of x
+```
+
+Estas pueden considerarse **semánticamente equivalentes** (si ambas implican lo mismo). Por tanto, deberían pertenecer a la misma clase. Entonces la **probabilidad total del "concepto"** debería ser:
+
+$$P(\text{clase}) = \sum_{\text{strings en la clase}} P(\text{string})$$
+---
+**¿Por qué este punto es crucial?**
+
+Porque al trabajar con LLMs:
+- El modelo puede generar miles de variantes textuales **de una misma respuesta semántica**
+- Si evaluás solo por exact matching o string similarityu, **subestimás la probabilidad del concepto correcto.**
+
+👉 Entonces, los autores abogan por construir distribuciones **no sobre cadenas**, sino sobre **dominios semánticos abstractos**.
+
+Este cambio de perspectiva es **clave** para su marco probabilístico. Les permite:
+
+- Medir correctamente alineación con la verdad.
+    
+- Detectar errores semánticos aunque el texto “suene bien”.
+    
+- Evaluar si el modelo es “confuso” o “seguro” semánticamente, no solo superficialmente.
+
+
+### E. Computing Empirical Distributions of TMs
+
+Dado que los TMs se comportan como procesos estocásticos y no siempre se tiene acceso directo a las probabildiades 
