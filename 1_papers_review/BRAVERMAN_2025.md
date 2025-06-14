@@ -345,6 +345,21 @@ Porque **toda la evaluación de alineación y concentración** se basa en esta d
 ## III.  The Framework 
 ### A. Assumptions, Hypothesis and Rationale
 
+Los autores presentan **su hipótesis central**, los supuestos que hacen sobre los TMs y los fundamentos que justifican su enfoque probabilístico. Quieren responder esta pregunta:
+
+> ¿Por qué analizar la distribución de significados generada por un TM es una buena forma de evaluar y mejorar sistemas con LLMs?.
+
+#### Supuesto 1:
+
+> La mayoria de los sistemas LLM pueden modelarse con uno o más TMs
+
+Significa que cualquier sistema que use un LLM (incluso los complejos) puede representarse como un conjunto de **transformaciones de entrada a salida** que dependen del modelo.
+
+- Un chatbot → TM: prompt → respuesta.
+- Un sistema de generación de código → TM: docstring → código.
+- Un sistema de razonamiento encadenado → varios TMs combinados.
+
+
 ### B. Defining Improvement
 
 ## IV. Illustrative Results on Autoformalization
