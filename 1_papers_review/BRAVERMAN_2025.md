@@ -376,6 +376,17 @@ Esto quiere decir que cada TM **representra una tarea clara y humana-interpretab
 Es decir, *dado un input $i$, el TM genera una distribución sobre distintas **clases de significados posibles** (no solo strings)*
 
 Y lo que importa no es solo si genera alguna respuesta correcta, sino **cuánta probabilidad se le asigna.** Esta visión lleva a **dos nociones clave:**
+- **Alineación:** ¿la clase más probable es la correcta?
+- **Concentración:** ¿la distribución está concentrada en una clase o es difusa?
+
+#### Hipótesis Complenentaria
+
+> Los casos **concentrados** y **desalineados** (o sea, equivocación con mucha confianza) son los más peligrosos.
+
+Estos son los que:
+- Pueden **engañar mecanismos de detección de alucinación** basados en certeza (e.g. si algo tiene alta probabilidad, parece confiable).
+- Producen **errores sistemáticos** difíciles de detectar.
+- Son candidatos ideales para el análisis y reingeniería del TM.
 
 
 
