@@ -359,6 +359,26 @@ Significa que cualquier sistema que use un LLM (incluso los complejos) puede rep
 - Un sistema de generación de código → TM: docstring → código.
 - Un sistema de razonamiento encadenado → varios TMs combinados.
 
+#### Supuesto 2:
+
+> Las tareas de los TMs pueden entenderse como tareas humanas específicas.
+
+Esto quiere decir que cada TM **representra una tarea clara y humana-interpretable** (como generar especificaciones, traducir código, etc.), y sus salidas pueden evaluarse en términos de *clases de resultados equivalentes.* Esto es clave porque:
+
+- Permite definir si **una salida es correcta o no.**
+- Permite agrupar salidas **semánticamente equivalentes** (*meaning classes*)
+- Permite evaluar el modelo de forma significativa, no solo superficial.
+
+#### Hipótesis Principal
+
+> El comportamiento de un TM se puede caracterizar como una **distribución probabilística** sobre conceptos.
+
+Es decir, *dado un input $i$, el TM genera una distribución sobre distintas **clases de significados posibles** (no solo strings)*
+
+Y lo que importa no es solo si genera alguna respuesta correcta, sino **cuánta probabilidad se le asigna.** Esta visión lleva a **dos nociones clave:**
+
+
+
 
 ### B. Defining Improvement
 
