@@ -468,6 +468,28 @@ El texto menciona la **definición probabilísitca generalizada**, sobre todo el
 
 ## IV. Illustrative Results on Autoformalization
 
+Muestran, con un experimento concreto, que:
+- Es posible construir y analizar distribuciones de significado generadas por un TM.
+- Los conceptos de alineación y concentración son útiles para **diagnosticar errores sistemáticos**.
+- Estas observaciones pueden guiar **mejoras efectivas** en el TM.
+
+#### Dataset CloverBench
+
+Consta de **62 programas simples** (estilo textbook). Cada uno tiene:
+- Una implementación en **Dafny**
+- Su **docstring** (input al TM)
+- Especificacioens formales (pre/postconditions) como **ground truth**
+- La firma del método.
+
+📌 El TM toma el docstring + firma, y debe generar las especificaciones correctas.
+
+#### Cómo ejecutan el TM
+
+- El TM se ejecuta **30 veces por input** para capturar su comportamiento estocástico.
+- Usan el modelo **Gemini 1.5 Flash** con:
+	- Contexto de1000 tokens.
+	- top-k = 
+
 ### Table I
 ### Table II
 
