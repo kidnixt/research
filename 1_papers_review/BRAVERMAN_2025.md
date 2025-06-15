@@ -444,7 +444,25 @@ Esto genera una **matriz 2x2** de escenarios para un input:
 
 #### ¿Qué significa que un TM mejora a otro?
 
-Supongamos que tenemos dos TMS, $t$ y 
+Supongamos que tenemos dos TMS, $t$ y $t'$, y queremos decir que $t'$ **mejora a** $t$. La mejora se define **punto por punto** sobre un conjunto de inputs de prueba.
+
+**Requisitos:**
+- $t'$ genera **más casos alineados y concentrados**.
+- $t'$ genera **menos casos concentrados y desalineados**.
+
+Eso significa que el nuevo TM:
+
+- Es más seguro (se equivoca menos con alta certeza).
+- Es más confiable (tiene más confianza en respuestas correctas).
+
+#### Definición general de mejora
+
+El texto menciona la **definición probabilísitca generalizada**, sobre todo el dominio de inputs, usando una distribución $D$ sobre los inputs:
+
+**Mejor con respecto a $D$**:
+
+1. Con **alta probabilidad**, un input $i \sim D$ tiene:
+	1. Mayor probabilidad de alineación **
 ## IV. Illustrative Results on Autoformalization
 
 ### Table I
