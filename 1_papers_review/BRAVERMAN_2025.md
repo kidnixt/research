@@ -92,6 +92,7 @@ Los autores enfatizan que si bien muchas aplicaciones usan el LLM como una caja 
 
 Esto los lleva a analizar _distribuciones sobre clases semánticas_, no solo sobre tokens.
 
+---
 
 ### B .Autoformalization
 
@@ -144,6 +145,7 @@ Es el **caso de estudio** principal que se usa para aplicar el marco probabilís
 
 ![[Pasted image 20250613102054.png]]
 
+---
 ### C. Transference Models (TMs)
 
 #### ¿Qué es un Transference Model?
@@ -295,7 +297,7 @@ Usar una **distribución empírica** construida por muestreo:
 	2. Si dos salidas son equivalentes según un STM solver, pertenencen a la msima clase.
 4. Se cuenta cuántas veces apareció cada clase. Eso forma una **distribución categórica empírica:**
 
-$$\hat{P}_i(c) = \frac{\text{\# de veces que se generó la clase } c}{\text{total de ejecuciones}}$$
+$$\hat{P}_i(c) = \frac{\text{cantidad de veces que se generó la clase } c}{\text{total de ejecuciones}}$$
 Esta es la distribución sobre **conceptos**, no sobre cadenas de texto.
 
 ---
@@ -539,6 +541,7 @@ Pero esto puede ser engañoso:
 
 **Solo viendo la primera respuesta no se revela el comportamiento real del modelo**. Se necesitan muestras múltiples.
 
+---
 ### Table II: Tipos de erorres en casos desalineados.
 
 De los **14 casos desalineados**, 11 corresponden a errores conocidos de formalización:
@@ -555,11 +558,14 @@ Esto apoya una de las hipótesis centrales del paper: **los errores del TM puede
 
 Ejemplo concreto: en el caso _LinearSearch_, la postcondición no dice que el índice devuelto es el **primero**. Es un fallo típico: el modelo no compone correctamente subpropiedades ⇒ lo que se llama el **compositional gap**.
 
+---
 #### Mejora del TM
 
 Hacen una modificación al TM:
 - Agregan una **tarea previa** que clasifica cada oración del docstring como *precondición*, *postcondición* o *ninguna*.
 - Esto ayuda a estructurar mejor la entrada antes de generar la especificación.
+
+---
 ### Table III: Resultados tras la mejora
 
 | |**Concentrada**|**No concentrada**|
@@ -572,12 +578,14 @@ Hacen una modificación al TM:
 - Los casos peligrosos (concentrados pero desalineados) bajan de 6 a 2.
 - Estos dos casos (**modify_2d_array**, **on-line-max**) son ahora candidatos claros para una nueva ronda de mejora.
 
+---
 ### Conclusiones de la sección
 
 - El marco propuesto **permite identificar debilidades del TM** (tipos de errores frecuentes).
 - Los conceptos de **alineación** y **concentración** son **útiles para priorizar qué inputs investigar y mejorar**.
 - Pequeñas modificaciones (como reestructurar el docstring) pueden tener **gran impacto** en el comportamiento del sistema.
 
+---
 ### Mis preguntitas
 
 - ¿Cuánto mejora el TM por la modificación en sí y cuánto por el re-análisis del input?
@@ -585,6 +593,7 @@ Hacen una modificación al TM:
 - ¿Cómo cambia este comportamiento con otros modelos (p. ej. GPT-4, Claude)?
 - ¿Cuán sensible es el análisis al número de muestras (30 ejecuciones)?
 
+---
 ## V. Related Work
 
 ### Surface Form Competition [7]
@@ -594,6 +603,7 @@ Hacen una modificación al TM:
 - Apoya la idea de que **la probabilidad debería asignarse a significados**, no a cadenas individuales.
 - Refuerza la necesidad de **agrupar por clases semánticas** y no quedarse con la primera respuesta generada.
 
+---
 ### Detección de alucinaciones mediante entropía semántica [4]
 
 > Farquhar et al. proponen medir **entropía sobre clases semánticas** como forma de detectar alucinaciones en LLMs.
@@ -601,6 +611,7 @@ Hacen una modificación al TM:
 - Se alinea con la idea de que los modelos no alucinan solo cuando tienen alta entropía.
 - Este paper **va más allá**, al usar esa información para **mejorar el sistema**, no solo para detectar errores.
 
+---
 ### Clover y el concepto de Transference Model [17]
 
 > El trabajo _Clover_ introdujo el uso de LLMs para generar especificaciones verificables, y ya incluía la idea de **modelar el proceso como un TM**, aunque no de forma tan formal.
@@ -610,16 +621,20 @@ Este paper:
 - Introduce nociones cuantificables como **alineación** y **concentración**.
 - Analiza la distribución entera, no solo el primer output.
 
+---
 ### DSPy y generación declarativa de prompts [9]
 
 > DSPy permite construir sistemas declarativos donde los prompts son tratados como componentes ajustables del sistema.
 
 Aunque no es el foco central del paper, DSPy representa el tipo de **ingeniería basada en LLMs** donde este marco de análisis sería útil para evaluar y refinar componentes.
 
+---
 
 ### Conclusiones de la sección
 
 > “Estos trabajos previos muestran que los conceptos de equivalencia semántica, distribución de outputs y comportamiento no determinista del LLM son relevantes, **pero ninguno ha propuesto un framework para sistematizar el análisis y mejora de TMs** como lo hacemos acá.”
+
+---
 
 ## VI. Conclusions and Future Work
 
@@ -633,6 +648,7 @@ El comportamiento probabilístico de un TM **no es ruido**, sino **una fuente ri
 - Detectar errores peligrosos (concentrados y desalineados)
 - Guiar mejorar especificas y seguras.
 
+---
 ### Casos relevantes: misalignment + concentración
 
 Los autores enfatizan que **los casos más críticos** son aquellos donde:
@@ -641,6 +657,8 @@ Los autores enfatizan que **los casos más críticos** son aquellos donde:
 - Pero equivocado (desalineación).
 
 Estos casos son difíciles de detectar con técnicas tradicionales (como entropy o heurísticas), y por eso su análisis de distribuciones semánticas es valioso.
+
+---
 
 ### Reconocen que aún faltan validaciones
 
@@ -652,6 +670,7 @@ Este es un trabajo preliminar, y los autores son honestos sobre las **limitacion
 
 Plantean que se necesitan muchos más RQs (_research questions_) y experimentos para afirmar impacto general.
 
+---
 ### Preguntas abiertas relevantes
 
 Los autores proponen preguntas muy concretas para futuras investigaciones:
@@ -662,6 +681,7 @@ Los autores proponen preguntas muy concretas para futuras investigaciones:
 4. **¿Qué tan sensible es el análisis a la estrategia de decodificación** (top-k, temperature, etc.)?
 5. **¿Qué tan robusto es el método de agrupamiento semántico?**
 
+---
 ### Posibles lineas futuras 
 
 El paper sugiere varios caminos interesantes:
@@ -671,6 +691,8 @@ El paper sugiere varios caminos interesantes:
 - Estudiar **composicionalidad** entre TMs: ¿podemos componer mejoras modulares?
 - Aplicar el enfoque a tareas con **espacios semánticos más estructurados** (e.g., preferencias, rankings).
 - Analizar **trade-offs entre entropía y alineación**.
+
+---
 ### A. The Case of Agentic AI
 
 > “El framework también puede aplicarse al análisis de sistemas agenticos (goal-pursuing) habilitados por LLMs.”
@@ -685,6 +707,7 @@ El paper sugiere varios caminos interesantes:
     - Violar restricciones del entorno de forma competente.
     - Parecer razonable mientras produce resultados inseguros.
 
+---
 
 
 ## Cierre Conceptual
@@ -696,3 +719,4 @@ Y abre la puerta a una futura **ingeniería de sistemas LLM**, donde:
 - Se mide no solo “qué dice el modelo”, sino “qué probabilidad le asigna a cada interpretación”.
 - Se puede mejorar un sistema con una noción clara de progreso, sin romper lo que ya funciona.
 - Se combinan conceptos de verificación formal, aprendizaje estadístico y análisis semántico.
+
