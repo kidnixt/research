@@ -488,9 +488,23 @@ Consta de **62 programas simples** (estilo textbook). Cada uno tiene:
 - El TM se ejecuta **30 veces por input** para capturar su comportamiento estocástico.
 - Usan el modelo **Gemini 1.5 Flash** con:
 	- Contexto de1000 tokens.
-	- top-k = 
+	- top-k = 40
+	- top-p = 0.95
+	- Temperatura = 0.7
+- Si se genera una salida inválida (sintácticamente incorrecta), se la trata como una **clase aparte** (no se agrupa con ninguna otra)
+- Las clases de salida se agruapn usando un **solver SMT** para deterctar equivalencia semántica entre especificaciones. 
+
+Este setup permite construir una distribución empírica $\hat{P_i}(c)$ para cada input $i$, sobre las clases de significado $c$.
 
 ### Table I
+
+Resumen de cuántas entradas (de las 62) caen en cada una de las 4 categorías combinando alineación y concentración:
+
+||**Concentrada**|**No concentrada**|
+|:---------------|:---------------:|:---------------:|
+|**Alineada**|46|3|
+|Correcta pero no es la ganadora|2|3|
+|Correcta no generada|4|4|
 ### Table II
 
 ### Table III
