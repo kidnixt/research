@@ -396,6 +396,18 @@ Proponen que mejorar un TM se parece a **refinar un programa** en el sentido de 
 - Reducir los casos donde se confunde con alta certeza.
 - No romper los casos donde ya funcionaba bien.
 
+Esto sugiere que **una mejora no debe dañar lo que ya funciona,** sino ampliar y corregir su comportamiento, una visión **ingenieril** y **formal** del proceso de mejora. 
+
+#### Hipótesis adicional
+
+> Cuando una clase incorrecta es la **dominante,** su **"tipo de error"** se puede **verbalizar en términos específicos de la tarea**
+
+Por ejemplo, en autoformalización, hay tipos de errores conocidos:
+- Precondición muy débil
+- Postcondición incorrecta
+- Sintaxis inválida.
+
+Cuando un TM se equivoca con alta certeza, muchas veces lo hace de una forma que **esta dentro de una de estas categorías conocidas**. Esto permite **diagnosticar fallos automáticamente** y **guiar ajustes específicos**.
 
 
 
