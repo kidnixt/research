@@ -570,6 +570,42 @@ Hacen una modificación al TM:
 
 ## V. Related Work
 
+### Surface Form Competition [7]
+
+> Este concepto, introducido por Holtzman et al., muestra que a veces la respuesta más probable **no es la correcta** porque hay muchas formas de decir la respuesta correcta, pero solo una forma de decir la incorrecta.
+
+- Apoya la idea de que **la probabilidad debería asignarse a significados**, no a cadenas individuales.
+- Refuerza la necesidad de **agrupar por clases semánticas** y no quedarse con la primera respuesta generada.
+
+### Detección de alucinaciones mediante entropía semántica [4]
+
+> Farquhar et al. proponen medir **entropía sobre clases semánticas** como forma de detectar alucinaciones en LLMs.
+
+- Se alinea con la idea de que los modelos no alucinan solo cuando tienen alta entropía.
+- Este paper **va más allá**, al usar esa información para **mejorar el sistema**, no solo para detectar errores.
+
+### Clover y el concepto de Transference Model [17]
+
+> El trabajo _Clover_ introdujo el uso de LLMs para generar especificaciones verificables, y ya incluía la idea de **modelar el proceso como un TM**, aunque no de forma tan formal.
+
+Este paper:
+- Toma esa idea y la **expande formalmente**.
+- Introduce nociones cuantificables como **alineación** y **concentración**.
+- Analiza la distribución entera, no solo el primer output.
+
+### DSPy y generación declarativa de prompts [9]
+
+> DSPy permite construir sistemas declarativos donde los prompts son tratados como componentes ajustables del sistema.
+
+Aunque no es el foco central del paper, DSPy representa el tipo de **ingeniería basada en LLMs** donde este marco de análisis sería útil para evaluar y refinar componentes.
+
+
+### Conclusiones de la sección
+
+> “Estos trabajos previos muestran que los conceptos de equivalencia semántica, distribución de outputs y comportamiento no determinista del LLM son relevantes, **pero ninguno ha propuesto un framework para sistematizar el análisis y mejora de TMs** como lo hacemos acá.”
+
 ## VI. Conclusions and Future Work
+
+
 
 ### A. The Case of Agentic AI
