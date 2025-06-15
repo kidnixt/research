@@ -524,8 +524,36 @@ Pero esto puede ser engañoso:
 
 ### Table II: Tipos de erorres en casos desalineados.
 
-### Table III
+De los **14 casos desalineados**, 11 corresponden a errores conocidos de formalización:
 
+|Tipo de error|Concentrado|No concentrado|Total|
+|---|---|---|---|
+|Postcondición débil|2|3|5|
+|Postcondición incorrecta|1|2|3|
+|Error de sintaxis|1|2|3|
+|Precondición débil|1|0|1|
+|Precondición fuerte|1|0|1|
+
+Esto apoya una de las hipótesis centrales del paper: **los errores del TM pueden clasificarse semánticamente**, lo que permite guiar su reingeniería.
+
+Ejemplo concreto: en el caso _LinearSearch_, la postcondición no dice que el índice devuelto es el **primero**. Es un fallo típico: el modelo no compone correctamente subpropiedades ⇒ lo que se llama el **compositional gap**.
+
+#### Mejora del TM
+
+Hacen una modificación al TM:
+- Agregan una **tarea previa** que clasifica cada oración del docstring como *precondición*, *postcondición* o *ninguna*.
+- Esto ayuda a estructurar mejor la entrada antes de generar la especificación.
+### Table III: Resultados tras la mejora
+
+| |**Concentrada**|**No concentrada**|
+|----------------------------|------------------|------------------------|
+|**Alineada**|57|1|
+|Correcta pero no es la ganadora|0|0|
+|Correcta no generada|2|2|
+
+- Pasan de 46 → **57 casos alineados y concentrados**.
+- Los casos peligrosos (concentrados pero desalineados) bajan de 6 a 2.
+- Estos dos casos (**modify_2d_array**, **on-line-max**) son ahora candidatos claros para una nueva ronda de mejora.
 ## V. Related Work
 
 ## VI. Conclusions and Future Work
