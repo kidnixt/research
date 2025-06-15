@@ -414,6 +414,20 @@ Cuando un TM se equivoca con alta certeza, muchas veces lo hace de una forma que
 
 ### B. Defining Improvement
 
+#### ¿Qué es una distribución alineada?
+
+Para un input $i$, se generan múltiples outputs y se agrupan en **clases de significado.**
+
+- Se dice que la distribución es **alineada** si la clase de significado **con mayor probabilidad** (la clase ganadora), es **correcta.**
+- Si la clase correcta está presente pero no es la más probable ⇒ **desalineada**.
+- Si la clase correcta **ni siquiera aparece** en la muestra ⇒ **fuertemente desalineada**.
+
+#### ¿Qué es una distribución concentrada?
+
+Una distribución se considera **concentrada** si la clase ganadora tiene **probabilidad mayor o igual que la suma del resto:**
+
+$$P(\text{clase ganadora}) \geq \sum_{\text{c}\neq\text{ganadora}} P(\text{c})$$
+
 ## IV. Illustrative Results on Autoformalization
 
 ### Table I
