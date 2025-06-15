@@ -657,3 +657,15 @@ El paper sugiere varios caminos interesantes:
 - Aplicar el enfoque a tareas con **espacios semánticos más estructurados** (e.g., preferencias, rankings).
 - Analizar **trade-offs entre entropía y alineación**.
 ### A. The Case of Agentic AI
+
+> “El framework también puede aplicarse al análisis de sistemas agenticos (goal-pursuing) habilitados por LLMs.”
+
+#### ¿Qué significa esto?
+
+- Sistemas agenticos son aquellos que **toman decisiones en múltiples pasos** (piensan, actúan, interactúan con el entorno).
+- Estos sistemas pueden modelarse como **procesos de decisión tipo MDP** (Markov Decision Process).
+- El LLM implementa los _TMs_ que, dada la historia de interacciones, generan **acciones o pensamientos** (meaning classes).
+- Analizando las distribuciones de estos TMs, se pueden identificar **trayectorias peligrosas** antes de que ocurran, como:
+    - Invocar acciones sin autorización humana.
+    - Violar restricciones del entorno de forma competente.
+    - Parecer razonable mientras produce resultados inseguros.
