@@ -379,7 +379,7 @@ Y lo que importa no es solo si genera alguna respuesta correcta, sino **cuánta 
 - **Alineación:** ¿la clase más probable es la correcta?
 - **Concentración:** ¿la distribución está concentrada en una clase o es difusa?
 
-#### Hipótesis Complenentaria
+#### Hipótesis Complementaria
 
 > Los casos **concentrados** y **desalineados** (o sea, equivocación con mucha confianza) son los más peligrosos.
 
@@ -387,6 +387,15 @@ Estos son los que:
 - Pueden **engañar mecanismos de detección de alucinación** basados en certeza (e.g. si algo tiene alta probabilidad, parece confiable).
 - Producen **errores sistemáticos** difíciles de detectar.
 - Son candidatos ideales para el análisis y reingeniería del TM.
+
+#### Relación con *refinamiento* en verificación formal
+
+Proponen que mejorar un TM se parece a **refinar un programa** en el sentido de subtipado de comportamiento (como Liskov/Wing). Un TM mejorado, debería:
+
+- Generar más outputs correctos con alta certeza.
+- Reducir los casos donde se confunde con alta certeza.
+- No romper los casos donde ya funcionaba bien.
+
 
 
 
