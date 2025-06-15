@@ -496,16 +496,33 @@ Consta de **62 programas simples** (estilo textbook). Cada uno tiene:
 
 Este setup permite construir una distribución empírica $\hat{P_i}(c)$ para cada input $i$, sobre las clases de significado $c$.
 
-### Table I
+### Table I: Resultados de Alineación y Concentración
 
 Resumen de cuántas entradas (de las 62) caen en cada una de las 4 categorías combinando alineación y concentración:
 
-||**Concentrada**|**No concentrada**|
-|:---------------|:---------------:|:---------------:|
-|**Alineada**|46|3|
-|Correcta pero no es la ganadora|2|3|
-|Correcta no generada|4|4|
-### Table II
+|                                 | **Concentrada** | **No concentrada** |
+| :------------------------------ | :-------------: | :----------------: |
+| **Alineada**                    |       46        |         3          |
+| Correcta pero no es la ganadora |        2        |         3          |
+| Correcta no generada            |        4        |         4          |
+Lo que muesta esta tabla:
+- En **49 casos** (46 + 3), la distribución estaba alineada (la clase correcta fue la más probable)
+- En **54 casos**, la clase correcta apareció.
+- En **46 casos**, la distribución fue **alineada y concentrada**
+
+Esto **confirma que el análisis empírico capta cuándo el modelo realmente “entiende” la tarea**.
+
+#### Comparación con "zero-temp"
+
+Mencionan que si se ejecuta el TM en modo determinista (temperatura = 0), se obtienen **47 outputs alineados**.
+
+Pero esto puede ser engañoso:
+- Algunos outputs correctos eran en realidad parte de **distribuciones muy dispersas**.
+- Otros outputs eran **incorrectos**, aunque parecían seguros.
+
+**Solo viendo la primera respuesta no se revela el comportamiento real del modelo**. Se necesitan muestras múltiples.
+
+### Table II: Tipos de erorres en casos desalineados.
 
 ### Table III
 
