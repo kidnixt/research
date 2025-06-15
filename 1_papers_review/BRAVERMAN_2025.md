@@ -462,7 +462,10 @@ El texto menciona la **definición probabilísitca generalizada**, sobre todo el
 **Mejor con respecto a $D$**:
 
 1. Con **alta probabilidad**, un input $i \sim D$ tiene:
-	1. Mayor probabilidad de alineación **
+	1. Mayor probabilidad de alineación + concentración con $t'$ que con $t$.
+2. Si un input ya estaba bien con $t$, también lo está con $t'$ ⇒ **no regresión**.
+3. El número de inputs que son **concentrados y desalineados** debe ser menor o igual en $t'$.
+
 ## IV. Illustrative Results on Autoformalization
 
 ### Table I
