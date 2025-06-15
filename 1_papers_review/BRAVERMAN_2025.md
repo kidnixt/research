@@ -250,6 +250,8 @@ ensures the returned index is the first occurrence of x
 Estas pueden considerarse **semánticamente equivalentes** (si ambas implican lo mismo). Por tanto, deberían pertenecer a la misma clase. Entonces la **probabilidad total del "concepto"** debería ser:
 
 $$P(\text{clase}) = \sum_{\text{strings en la clase}} P(\text{string})$$
+
+
 ---
 #### ¿Por qué este punto es crucial?
 
@@ -606,6 +608,52 @@ Aunque no es el foco central del paper, DSPy representa el tipo de **ingeniería
 
 ## VI. Conclusions and Future Work
 
+### Conclusiones Principales
 
+> “Mostramos cómo se pueden recuperar distribuciones sobre clases de significado desde el comportamiento estocástico de TMs, y cómo eso permite detectar errores y guiar mejoras.”
 
+Este es el **claim central** del paper:  
+El comportamiento probabilístico de un TM **no es ruido**, sino **una fuente rica de información** para:
+- Evaluar confiabilidad
+- Detectar errores peligrosos (concentrados y desalineados)
+- Guiar mejorar especificas y seguras.
+
+### Casos relevantes: misalignment + concentración
+
+Los autores enfatizan que **los casos más críticos** son aquellos donde:
+
+- El TM está seguro (concentración),
+- Pero equivocado (desalineación).
+
+Estos casos son difíciles de detectar con técnicas tradicionales (como entropy o heurísticas), y por eso su análisis de distribuciones semánticas es valioso.
+
+### Reconocen que aún faltan validaciones
+
+Este es un trabajo preliminar, y los autores son honestos sobre las **limitaciones**:
+
+- No demuestran aún **generalización** a múltiples tareas.
+- No exploran distintas configuraciones de decodificación.
+- No prueban la **robustez del framework** ante otros métodos de aproximación semántica.
+
+Plantean que se necesitan muchos más RQs (_research questions_) y experimentos para afirmar impacto general.
+
+### Preguntas abiertas relevantes
+
+Los autores proponen preguntas muy concretas para futuras investigaciones:
+
+1. **¿Cómo influye la naturaleza de la tarea** en la efectividad del análisis?
+2. **¿Cuán importante es conocer la distribución real de inputs** para que el framework generalice?
+3. **¿Mejorar sobre el set de prueba implica mejorar globalmente?**
+4. **¿Qué tan sensible es el análisis a la estrategia de decodificación** (top-k, temperature, etc.)?
+5. **¿Qué tan robusto es el método de agrupamiento semántico?**
+
+### Posibles lineas futuras 
+
+El paper sugiere varios caminos interesantes:
+
+- Usar LLMs para **automatizar la caracterización de errores** (e.g., clasificar outputs como “postcondición débil”).
+- Crear **lenguajes más expresivos** para razonar sobre inputs, outputs y distribuciones.
+- Estudiar **composicionalidad** entre TMs: ¿podemos componer mejoras modulares?
+- Aplicar el enfoque a tareas con **espacios semánticos más estructurados** (e.g., preferencias, rankings).
+- Analizar **trade-offs entre entropía y alineación**.
 ### A. The Case of Agentic AI
