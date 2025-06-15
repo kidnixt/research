@@ -554,6 +554,20 @@ Hacen una modificación al TM:
 - Pasan de 46 → **57 casos alineados y concentrados**.
 - Los casos peligrosos (concentrados pero desalineados) bajan de 6 a 2.
 - Estos dos casos (**modify_2d_array**, **on-line-max**) son ahora candidatos claros para una nueva ronda de mejora.
+
+### Conclusiones de la sección
+
+- El marco propuesto **permite identificar debilidades del TM** (tipos de errores frecuentes).
+- Los conceptos de **alineación** y **concentración** son **útiles para priorizar qué inputs investigar y mejorar**.
+- Pequeñas modificaciones (como reestructurar el docstring) pueden tener **gran impacto** en el comportamiento del sistema.
+
+### Mis preguntitas
+
+- ¿Cuánto mejora el TM por la modificación en sí y cuánto por el re-análisis del input?
+- ¿Se podría automatizar la identificación de clases de error para hacer ajuste automático?
+- ¿Cómo cambia este comportamiento con otros modelos (p. ej. GPT-4, Claude)?
+- ¿Cuán sensible es el análisis al número de muestras (30 ejecuciones)?
+
 ## V. Related Work
 
 ## VI. Conclusions and Future Work
