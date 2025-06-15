@@ -428,6 +428,23 @@ Una distribución se considera **concentrada** si la clase ganadora tiene **prob
 
 $$P(\text{clase ganadora}) \geq \sum_{\text{c}\neq\text{ganadora}} P(\text{c})$$
 
+Alternativamente, podríamos decir que tiene más del 50% de la masa total. Esto es una **aproximación pragmática** a la noción de "certeza semántica" del modelo. 
+
+#### Clasificación de outputs según estas dos dimensiones
+
+Esto genera una **matriz 2x2** de escenarios para un input:
+
+|                 | **Concentrada** | **No Concentrada** |
+| --------------- | --------------- | ------------------ |
+| **Alineada**    | ✅ Ideal         | ⚠️ Incierto        |
+| **Desalineada** | ❌ Peligroso     | ❓ Ambiguo          |
+- **Concentrada + alineada**: el TM sabe lo que hace.
+- **Concentrada + desalineada**: error con alta confianza → muy peligroso.
+- **No concentrada**: el modelo está confundido o disperso → menos riesgoso pero requiere atención.
+
+#### ¿Qué significa que un TM mejora a otro?
+
+Supongamos que tenemos dos TMS, $t$ y 
 ## IV. Illustrative Results on Autoformalization
 
 ### Table I
