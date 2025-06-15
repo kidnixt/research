@@ -351,6 +351,7 @@ Los autores presentan **su hipótesis central**, los supuestos que hacen sobre l
 
 > ¿Por qué analizar la distribución de significados generada por un TM es una buena forma de evaluar y mejorar sistemas con LLMs?.
 
+---
 #### Supuesto 1:
 
 > La mayoria de los sistemas LLM pueden modelarse con uno o más TMs
@@ -361,6 +362,7 @@ Significa que cualquier sistema que use un LLM (incluso los complejos) puede rep
 - Un sistema de generación de código → TM: docstring → código.
 - Un sistema de razonamiento encadenado → varios TMs combinados.
 
+---
 #### Supuesto 2:
 
 > Las tareas de los TMs pueden entenderse como tareas humanas específicas.
@@ -371,6 +373,7 @@ Esto quiere decir que cada TM **representra una tarea clara y humana-interpretab
 - Permite agrupar salidas **semánticamente equivalentes** (*meaning classes*)
 - Permite evaluar el modelo de forma significativa, no solo superficial.
 
+---
 #### Hipótesis Principal
 
 > El comportamiento de un TM se puede caracterizar como una **distribución probabilística** sobre conceptos.
@@ -381,6 +384,7 @@ Y lo que importa no es solo si genera alguna respuesta correcta, sino **cuánta 
 - **Alineación:** ¿la clase más probable es la correcta?
 - **Concentración:** ¿la distribución está concentrada en una clase o es difusa?
 
+---
 #### Hipótesis Complementaria
 
 > Los casos **concentrados** y **desalineados** (o sea, equivocación con mucha confianza) son los más peligrosos.
@@ -390,6 +394,7 @@ Estos son los que:
 - Producen **errores sistemáticos** difíciles de detectar.
 - Son candidatos ideales para el análisis y reingeniería del TM.
 
+---
 #### Relación con *refinamiento* en verificación formal
 
 Proponen que mejorar un TM se parece a **refinar un programa** en el sentido de subtipado de comportamiento (como Liskov/Wing). Un TM mejorado, debería:
@@ -400,6 +405,7 @@ Proponen que mejorar un TM se parece a **refinar un programa** en el sentido de 
 
 Esto sugiere que **una mejora no debe dañar lo que ya funciona,** sino ampliar y corregir su comportamiento, una visión **ingenieril** y **formal** del proceso de mejora. 
 
+---
 #### Hipótesis adicional
 
 > Cuando una clase incorrecta es la **dominante,** su **"tipo de error"** se puede **verbalizar en términos específicos de la tarea**
@@ -411,8 +417,7 @@ Por ejemplo, en autoformalización, hay tipos de errores conocidos:
 
 Cuando un TM se equivoca con alta certeza, muchas veces lo hace de una forma que **esta dentro de una de estas categorías conocidas**. Esto permite **diagnosticar fallos automáticamente** y **guiar ajustes específicos**.
 
-
-
+---
 
 ### B. Defining Improvement
 
@@ -424,6 +429,7 @@ Para un input $i$, se generan múltiples outputs y se agrupan en **clases de sig
 - Si la clase correcta está presente pero no es la más probable ⇒ **desalineada**.
 - Si la clase correcta **ni siquiera aparece** en la muestra ⇒ **fuertemente desalineada**.
 
+---
 #### ¿Qué es una distribución concentrada?
 
 Una distribución se considera **concentrada** si la clase ganadora tiene **probabilidad mayor o igual que la suma del resto:**
@@ -432,6 +438,7 @@ $$P(\text{clase ganadora}) \geq \sum_{\text{c}\neq\text{ganadora}} P(\text{c})$$
 
 Alternativamente, podríamos decir que tiene más del 50% de la masa total. Esto es una **aproximación pragmática** a la noción de "certeza semántica" del modelo. 
 
+---
 #### Clasificación de outputs según estas dos dimensiones
 
 Esto genera una **matriz 2x2** de escenarios para un input:
@@ -444,6 +451,7 @@ Esto genera una **matriz 2x2** de escenarios para un input:
 - **Concentrada + desalineada**: error con alta confianza → muy peligroso.
 - **No concentrada**: el modelo está confundido o disperso → menos riesgoso pero requiere atención.
 
+---
 #### ¿Qué significa que un TM mejora a otro?
 
 Supongamos que tenemos dos TMS, $t$ y $t'$, y queremos decir que $t'$ **mejora a** $t$. La mejora se define **punto por punto** sobre un conjunto de inputs de prueba.
@@ -457,6 +465,7 @@ Eso significa que el nuevo TM:
 - Es más seguro (se equivoca menos con alta certeza).
 - Es más confiable (tiene más confianza en respuestas correctas).
 
+---
 #### Definición general de mejora
 
 El texto menciona la **definición probabilísitca generalizada**, sobre todo el dominio de inputs, usando una distribución $D$ sobre los inputs:
@@ -468,6 +477,7 @@ El texto menciona la **definición probabilísitca generalizada**, sobre todo el
 2. Si un input ya estaba bien con $t$, también lo está con $t'$ ⇒ **no regresión**.
 3. El número de inputs que son **concentrados y desalineados** debe ser menor o igual en $t'$.
 
+---
 ## IV. Illustrative Results on Autoformalization
 
 Muestran, con un experimento concreto, que:
@@ -475,6 +485,7 @@ Muestran, con un experimento concreto, que:
 - Los conceptos de alineación y concentración son útiles para **diagnosticar errores sistemáticos**.
 - Estas observaciones pueden guiar **mejoras efectivas** en el TM.
 
+---
 #### Dataset CloverBench
 
 Consta de **62 programas simples** (estilo textbook). Cada uno tiene:
@@ -485,6 +496,7 @@ Consta de **62 programas simples** (estilo textbook). Cada uno tiene:
 
 📌 El TM toma el docstring + firma, y debe generar las especificaciones correctas.
 
+---
 #### Cómo ejecutan el TM
 
 - El TM se ejecuta **30 veces por input** para capturar su comportamiento estocástico.
@@ -498,6 +510,7 @@ Consta de **62 programas simples** (estilo textbook). Cada uno tiene:
 
 Este setup permite construir una distribución empírica $\hat{P_i}(c)$ para cada input $i$, sobre las clases de significado $c$.
 
+---
 ### Table I: Resultados de Alineación y Concentración
 
 Resumen de cuántas entradas (de las 62) caen en cada una de las 4 categorías combinando alineación y concentración:
@@ -507,6 +520,7 @@ Resumen de cuántas entradas (de las 62) caen en cada una de las 4 categorías c
 | **Alineada**                    |       46        |         3          |
 | Correcta pero no es la ganadora |        2        |         3          |
 | Correcta no generada            |        4        |         4          |
+
 Lo que muesta esta tabla:
 - En **49 casos** (46 + 3), la distribución estaba alineada (la clase correcta fue la más probable)
 - En **54 casos**, la clase correcta apareció.
@@ -514,6 +528,7 @@ Lo que muesta esta tabla:
 
 Esto **confirma que el análisis empírico capta cuándo el modelo realmente “entiende” la tarea**.
 
+---
 #### Comparación con "zero-temp"
 
 Mencionan que si se ejecuta el TM en modo determinista (temperatura = 0), se obtienen **47 outputs alineados**.
@@ -669,3 +684,15 @@ El paper sugiere varios caminos interesantes:
     - Invocar acciones sin autorización humana.
     - Violar restricciones del entorno de forma competente.
     - Parecer razonable mientras produce resultados inseguros.
+
+
+
+## Cierre Conceptual
+
+Este paper propone una **forma principiada, formal y probabilística** de pensar en cómo mejorar sistemas basados en LLM. En vez de tratar los errores como accidentes, los analiza como **pistas estructurales** de lo que un modelo sabe, no sabe o cree saber.
+
+Y abre la puerta a una futura **ingeniería de sistemas LLM**, donde:
+
+- Se mide no solo “qué dice el modelo”, sino “qué probabilidad le asigna a cada interpretación”.
+- Se puede mejorar un sistema con una noción clara de progreso, sin romper lo que ya funciona.
+- Se combinan conceptos de verificación formal, aprendizaje estadístico y análisis semántico.
