@@ -41,10 +41,7 @@
     "/",
     "//Excalidraw",
     "//Tags",
-    "//2_seminario",
-    "//3_resources",
-    "//2_learning",
-    "//1_papers_review"
+    "//2_seminario"
   ],
   "expandFolderOnClick": true,
   "spacesFolder": "Tags",
