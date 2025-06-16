@@ -28,3 +28,29 @@ https://github.com/huggingface/transformers/blob/main/src/transformers/models/qw
 https://huggingface.co/Qwen/Qwen3-1.7B/blob/main/tokenizer_config.json
 
 Tambien se puede ver si printeas el type del tokenizer
+
+
+## 📌 ¿Por qué GPT-2 genera cadenas cortas más fácilmente?
+
+### 1. **GPT-2 tiene un vocabulario distinto**
+
+GPT-2 (especialmente el `gpt2` base de 117M) tiene un _vocabulario Byte Pair Encoding (BPE)_ que **tiende a descomponer los números dígito por dígito**:
+
+python
+
+CopyEdit
+
+`tokenizer = AutoTokenizer.from_pretrained("gpt2") print(tokenizer.tokenize("3.1415"))  # ['3', '.', '1415'] print(tokenizer.tokenize("12345"))   # ['12345']`
+
+Pero para muchos casos, especialmente con separación por `"."`, **genera tokens pequeños o incluso individuales**, lo que hace más probable que:
+
+- **termine pronto**
+    
+- **eos tenga más probabilidad** de ser emitido al cabo de pocos pasos
+    
+
+---
+
+### 2. **GPT-2 no está diseñado para mantener sesiones largas o turnos de diálogo**
+
+GPT-2 está entrenado **solo en texto plano**, sin el objetivo de mantener una "conversación", ni con prompts que tiendan a tener finales prolongados. Así que tiende a cerrar ideas más rápidamente.
