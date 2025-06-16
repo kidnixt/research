@@ -26,3 +26,5 @@ https://github.com/huggingface/transformers/blob/main/src/transformers/models/qw
 ![[Pasted image 20250616105630.png]]
 
 https://huggingface.co/Qwen/Qwen3-1.7B/blob/main/tokenizer_config.json
+
+Tambien se puede ver si printeas el type del tokenizer
