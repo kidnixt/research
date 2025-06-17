@@ -9,25 +9,23 @@
 
 ### A. 🧮 Rango (`rank`) y Top-r (`top_r`)
 
-- $\text{rank}(\delta) : \Sigma_s \rightarrow \mathbb{N}$  asigna un orden a cada símbolo $\sigma\in\Sigma_s$  según su probabilidad `δ(σ)`.
-    
-    - Se asume que $\text{rank}(\delta)$  es inyectiva (no hay empates). En caso de empate, se resuelve con un orden arbitrario (e.g., lexicográfico).
-        
+- $\text{rank}(\delta) : \Sigma_s \rightarrow \mathbb{N}$  asigna un orden a cada símbolo $\sigma\in\Sigma_s$  según su probabilidad $\delta(\sigma)$. 
+    - Se asume que $\text{rank}(\delta)$ es inyectiva (no hay empates). En caso de empate, se resuelve con un orden arbitrario (e.g., lexicográfico).
 - $\text{top}_r(\delta) = \{ \sigma \in \Sigma_s \mid \text{rank}(\delta)(\sigma) \leq r \}$: conjunto de los $r$ símbolos más probables (olvida su orden relativo interno).
-    
 
 ---
 
-### B. 🔁 Equivalencia Teórica `ρ =ₜₒₚ ρ'`
+### B. 🔁 Equivalencia Teórica $\rho =_{\text{top}_r} \rho'$ 
 
 Según el paper:
 
-> Dos distribuciones `ρ` y `ρ'` son equivalentes bajo `top_r` si:
-> 
+> Dos distribuciones $\rho$ y $\rho'$ son equivalentes bajo `top_r` si:
 > 1. Tienen el **mismo soporte**: `supp(ρ) = supp(ρ')`
->     
 > 2. Sus conjuntos `top_r` son iguales: `top_r(ρ) = top_r(ρ')`
->     
+
+
+
+$\rho =_{\text{top}_r} \rho' \iff$ $\text{supp}(\rho) = \text{supp}(\rho') \quad \text{y} \quad \text{top}_r(\rho) = \text{top}_r(\rho')$
 
 ⚠️ **Nota:** Esta definición ignora el orden interno dentro del top-r y sólo compara la pertenencia.
 
