@@ -19,9 +19,9 @@
 
 Según el paper:
 
-> Dos distribuciones $\rho$ y $\rho'$ son equivalentes bajo `top_r` si:
-> 1. Tienen el **mismo soporte**: `supp(ρ) = supp(ρ')`
-> 2. Sus conjuntos `top_r` son iguales: `top_r(ρ) = top_r(ρ')`
+> Dos distribuciones $\rho$ y $\rho'$ son equivalentes bajo $\text{top}_r$ si:
+> 1. Tienen el **mismo soporte**: $\text{supp}(\rho) = \text{supp}(\rho')$
+> 2. Sus conjuntos $\text{top}_r$ son iguales: $\text{top}_r(\rho) = \text{top}_r(\rho')$
 
 
 
@@ -33,21 +33,38 @@ $\rho =_{\text{top}_r} \rho' \iff$ $\text{supp}(\rho) = \text{supp}(\rho') \quad
 
 ### C. ⚙️ Implementación: `TopKProbabilityPartitionerPlus`
 
-El siguiente código implementa una partición basada en `top_k` y el soporte:
+El siguiente código implementa una partición basada en $\text{top}_r$ y el soporte:
 
-python
+``` python
+class TopKProbabilityPartitionerPlus(ProbabilityPartitioner):
 
-CopyEdit
+def __init__(self, k) -> None:         
+	self.k = k         
+	super().__init__()      
+	
+	def _get_partition(self, probability_vector):         
+		probability_vector = np.array(probability_vector)
+		order = (-probability_vector).argsort()  
+		
+		# Sort descending         
+		support_mask =probability_vector > 0    
+		# Identify the support         
+		top_k_mask = np.zeros_like(probability_vector, dtype=int)
+		top_k_mask[order[:self.k]] = 1           
+		# Mark top-k         
+		partition = top_k_mask * support_mask.astype(int)  
+		# Combine         
+		return partition
+```
 
-`class TopKProbabilityPartitionerPlus(ProbabilityPartitioner):     def __init__(self, k) -> None:         self.k = k         super().__init__()      def _get_partition(self, probability_vector):         probability_vector = np.array(probability_vector)         order = (-probability_vector).argsort()  # Sort descending         support_mask = probability_vector > 0    # Identify the support         top_k_mask = np.zeros_like(probability_vector, dtype=int)         top_k_mask[order[:self.k]] = 1           # Mark top-k         partition = top_k_mask * support_mask.astype(int)  # Combine         return partition`
+
+
 
 🧠 **Interpretación:**  
 Un símbolo está en la partición final **solo si**:
 
 - Está entre los `k` más probables (por orden de `argsort`).
-    
 - Tiene probabilidad estrictamente positiva (está en el soporte).
-    
 
 ---
 
