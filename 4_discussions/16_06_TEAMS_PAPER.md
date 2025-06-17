@@ -58,12 +58,17 @@ def __init__(self, k) -> None:
 ```
 
 
+Desde el punto de vista matemático, la clase implementa:
 
+$$
+\text{partition}(\rho) = \text{top}_r(\rho) \cap \text{supp}(\rho)
+$$
+
+Es decir, sólo se retienen los símbolos que están **tanto** entre los $r$ más probables **como** en el soporte.
 
 🧠 **Interpretación:**  
 Un símbolo está en la partición final **solo si**:
-
-- Está entre los `k` más probables (por orden de `argsort`).
+- Está entre los $k$ más probables (por orden de $\text{argsort}$).
 - Tiene probabilidad estrictamente positiva (está en el soporte).
 
 ---
@@ -72,29 +77,26 @@ Un símbolo está en la partición final **solo si**:
 
 ### Ejemplo:
 
-python
+p1 = [1.0, 0.0, 0.0]
+p2 = [0.9, 0.1, 0.0]
 
-CopyEdit
+#### Para k = 1:
 
-`p1 = [1.0, 0.0, 0.0] p2 = [0.9, 0.1, 0.0]`
+| Vector | Top-1 Mask | Soporte Mask | Partición Final |
+| ------ | ---------- | ------------ | --------------- |
+| p1     | [1,0,0]    | [1,0,0]      | [1,0,0]         |
+| p2     | [1,1,0]    | [1,1,0]      | [1,0,0]         |
 
-#### Para `k = 1`:
+✅ **Resultado:** Son **equivalentes** según el código, ya que el símbolo más probable y con soporte positivo es el mismo.
 
-|Vector|Top-1 Mask|Soporte Mask|Partición Final|
-|---|---|---|---|
-|`p1`|`[1,0,0]`|`[1,0,0]`|`[1,0,0]`|
-|`p2`|`[1,1,0]`|`[1,1,0]`|`[1,0,0]`|
+#### Para k = 2:
 
-🔍 **Resultado:** Son **equivalentes** según el código, ya que el símbolo más probable y con soporte positivo es el mismo.
+| Vector | Top-2 Mask | Soporte Mask | Partición Final |
+| ------ | ---------- | ------------ | --------------- |
+| p1     | [1,0,0]    | [1,0,0]      | [1,0,0]         |
+| p2     | [1,1,0]    | [1,1,0]      | [1,1,0]         |
 
-#### Para `k = 2`:
-
-|Vector|Top-2 Mask|Soporte Mask|Partición Final|
-|---|---|---|---|
-|`p1`|`[1,0,0]`|`[1,0,0]`|`[1,0,0]`|
-|`p2`|`[1,1,0]`|`[1,1,0]`|`[1,1,0]`|
-
-🔍 **Resultado:** **No son equivalentes**. La segunda distribución incluye un segundo símbolo con probabilidad positiva dentro del top-k.
+❌ **Resultado:** **No son equivalentes**. La segunda distribución incluye un segundo símbolo con probabilidad positiva dentro del top-k.
 
 ---
 
@@ -105,9 +107,7 @@ CopyEdit
 Esta clase implementa una **forma refinada de equivalencia `top_k`**, donde:
 
 > Se consideran equivalentes dos distribuciones si y solo si:
-> 
 > - Coinciden en sus símbolos más probables (top-k), **y**
->     
 > - Dichos símbolos están presentes en el soporte (probabilidad > 0).
 >     
 
