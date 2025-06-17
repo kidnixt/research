@@ -11,6 +11,8 @@
 
 - $\text{rank}(\delta) : \Sigma_s \rightarrow \mathbb{N}$  asigna un orden a cada símbolo $\sigma\in\Sigma_s$  según su probabilidad $\delta(\sigma)$. 
     - Se asume que $\text{rank}(\delta)$ es inyectiva (no hay empates). En caso de empate, se resuelve con un orden arbitrario (e.g., lexicográfico).
+    - Si existen empates en $\delta(\sigma)$, se asume un desempate fijo, por ejemplo, orden lexicográfico. Esto garantiza que $\text{rank}$ sea una función bien definida.
+
 - $\text{top}_r(\delta) = \{ \sigma \in \Sigma_s \mid \text{rank}(\delta)(\sigma) \leq r \}$: conjunto de los $r$ símbolos más probables (olvida su orden relativo interno).
 
 ---
@@ -28,6 +30,8 @@ Según el paper:
 $\rho =_{\text{top}_r} \rho' \iff$ $\text{supp}(\rho) = \text{supp}(\rho') \quad \text{y} \quad \text{top}_r(\rho) = \text{top}_r(\rho')$
 
 ⚠️ **Nota:** Esta definición ignora el orden interno dentro del top-r y sólo compara la pertenencia.
+- Es decir, dos distribuciones pueden tener los mismos símbolos más probables pero en distinto orden, y aún así ser equivalentes bajo esta definición.
+
 
 ---
 
@@ -37,24 +41,23 @@ El siguiente código implementa una partición basada en $\text{top}_r$ y el sop
 
 ``` python
 class TopKProbabilityPartitionerPlus(ProbabilityPartitioner):
+    def __init__(self, k) -> None:         
+        self.k = k         
+        super().__init__()      
 
-def __init__(self, k) -> None:         
-	self.k = k         
-	super().__init__()      
-	
-	def _get_partition(self, probability_vector):         
-		probability_vector = np.array(probability_vector)
-		order = (-probability_vector).argsort()  
-		
-		# Sort descending         
-		support_mask =probability_vector > 0    
-		# Identify the support         
-		top_k_mask = np.zeros_like(probability_vector, dtype=int)
-		top_k_mask[order[:self.k]] = 1           
-		# Mark top-k         
-		partition = top_k_mask * support_mask.astype(int)  
-		# Combine         
-		return partition
+    def _get_partition(self, probability_vector):         
+        probability_vector = np.array(probability_vector)
+        order = (-probability_vector).argsort()  
+
+        # Sort descending         
+        support_mask = probability_vector > 0    
+        # Identify the support         
+        top_k_mask = np.zeros_like(probability_vector, dtype=int)
+        top_k_mask[order[:self.k]] = 1           
+        # Mark top-k         
+        partition = top_k_mask * support_mask.astype(int)  
+        # Combine         
+        return partition
 ```
 
 
@@ -120,6 +123,8 @@ Se discutió la precondición $\text{supp}(\rho) = \text{supp}(\rho')$ como base
 
 - ❌ **Problema**: En el caso de $\text{top}_k$, esta precondición **puede ser restrictiva o incluso inconsistente** con la intención de comparar solo los elementos más probables.
 - ✅ **Solución adoptada**: Considerar una proyección previa ($\text{samptop}_k$) que mantiene sólo los $k$ elementos más probables, luego compara.
+	- donde $\text{samptop}_k(\rho)$ denota la restricción de $\rho$ al conjunto $\text{top}_k(\rho)$.
+
 
 > 🗣️ _"top_k naturalmente induce una equivalencia, aunque no necesariamente exige igualdad de soporte completo."_
 
@@ -147,18 +152,68 @@ $\text{supp}(\rho) = \text{supp}(\rho')$
 
 - Aunque dos distribuciones puedan coincidir en su `top_k`, si sus soportes globales difieren, **no se consideran equivalentes bajo esta congruencia**.
 - Esta es una elección **consciente y deliberada**, que prioriza:
-    
     - Coherencia algebraica
-        
     - Simplicidad de implementación en cuantización
-        
     - Consistencia con otras particiones utilizadas (e.g., `QuantizationPartitionerPlus`)
-        
+
 
 ---
 
 ### 🔜 Próximos Pasos
 
 - 📦 En la presentación, se usará la definición de equivalencia inducida por el código (`TopKProbabilityPartitionerPlus`), donde la intersección con el soporte es clave.
-    
 - 🧪 Se deja abierta la posibilidad de refinar esta equivalencia más adelante, eliminando la dependencia del soporte si se desea una partición puramente basada en top-k rankings.
+
+---
+
+## 1. **Preguntas de fondo (filosofía del modelado)**
+
+### ❓ ¿Qué significa realmente que dos distribuciones sean "equivalentes"?
+
+- ¿Debe esa equivalencia preservar información estructural completa (como el soporte)?
+    
+- ¿O basta con que preserven propiedades funcionales específicas (como el top-k para una tarea de clasificación)?
+    
+
+### ❓ ¿Hasta qué punto las definiciones matemáticas deben adaptarse a las necesidades de implementación?
+
+- ¿Es válido ajustar una definición teórica si eso facilita una implementación más robusta, eficiente o útil en la práctica?
+    
+
+---
+
+## 🧪 2. **Preguntas prácticas / de implementación**
+
+### ❓ ¿Debe la equivalencia `top_k` depender del soporte completo?
+
+- En muchos casos reales (e.g., sampling, generación de texto), **solo importa el top-k con probabilidad positiva**. ¿Tiene sentido exigir igualdad de soporte completo?
+    
+
+### ❓ ¿Cómo afecta esta definición a tareas downstream?
+
+- Por ejemplo: ¿Dos vectores que difieren solo en símbolos muy improbables deben considerarse distintos?
+    
+- ¿Qué impacto tiene eso en cuantización, clustering o reducción de modelos?
+    
+
+---
+
+## 🔄 3. **Posibles caminos futuros / decisiones abiertas**
+
+### ❓ ¿Podríamos definir una familia de equivalencias parametrizadas?
+
+- Por ejemplo, `EquivTopK_strict` (requiere igualdad de soporte) vs `EquivTopK_loose` (ignora soporte y se enfoca solo en top-k).
+    
+
+### ❓ ¿Queremos que las particiones sean _compatibles entre sí_?
+
+- Es decir, ¿deberíamos exigir que dos particiones (top-k y cuantización, por ejemplo) se puedan comparar o componer coherentemente?
+    
+
+---
+
+## 🎯 Conclusión clave que podés llevarte
+
+> **La elección de qué considerar "equivalente" entre distribuciones no es solo una cuestión matemática, sino también epistemológica y práctica.**
+
+Es una decisión que **afecta directamente el tipo de modelos que vas a construir, comparar, y cómo vas a interpretarlos.** Elegir bien esta equivalencia es tan importante como elegir una buena métrica o loss function.
