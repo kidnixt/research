@@ -104,25 +104,22 @@ p2 = [0.9, 0.1, 0.0]
 
 ### 3.1. ¿Qué está midiendo realmente `TopKProbabilityPartitionerPlus`?
 
-Esta clase implementa una **forma refinada de equivalencia `top_k`**, donde:
+Esta clase implementa una **forma refinada de equivalencia** $\text{top}_k$ donde:
 
-> Se consideran equivalentes dos distribuciones si y solo si:
-> - Coinciden en sus símbolos más probables (top-k), **y**
+> Se consideran equivalentes dos distribuciones $\rho$ y $\rho'$  si y solo si:
+> - Coinciden en sus símbolos más probables $\text{top}_k$, **y**
 > - Dichos símbolos están presentes en el soporte (probabilidad > 0).
->     
 
-Esto difiere sutilmente de la definición matemática, que compara los `top_k` **suponiendo igualdad de soportes globales**.
+Esto difiere sutilmente de la definición matemática, que compara los $\text{top}_k$ **suponiendo igualdad de soportes globales**.
 
 ---
 
 ### 3.2. ⚠️ Conflicto entre Teoría y Práctica
 
-Se discutió la precondición `supp(p) = supp(p')` como base para definir cualquier equivalencia `E`.
+Se discutió la precondición $\text{supp}(\rho) = \text{supp}(\rho')$ como base para definir cualquier equivalencia $E$.
 
-- ❌ **Problema**: En el caso de `top_k`, esta precondición **puede ser restrictiva o incluso inconsistente** con la intención de comparar solo los elementos más probables.
-    
-- ✅ **Solución adoptada**: Considerar una proyección previa (`samptop_k`) que mantiene sólo los `k` elementos más probables, luego compara.
-    
+- ❌ **Problema**: En el caso de $\text{top}_k$, esta precondición **puede ser restrictiva o incluso inconsistente** con la intención de comparar solo los elementos más probables.
+- ✅ **Solución adoptada**: Considerar una proyección previa ($\text{samptop}_k$) que mantiene sólo los $k$ elementos más probables, luego compara.
 
 > 🗣️ _"top_k naturalmente induce una equivalencia, aunque no necesariamente exige igualdad de soporte completo."_
 
@@ -132,10 +129,10 @@ Se discutió la precondición `supp(p) = supp(p')` como base para definir cualqu
 
 Propuesta de distinción útil en el análisis:
 
-|Término|Condición|Analogía|
-|---|---|---|
-|Generable Prefix (`u`)|`P(u) > 0`|"Reachable"|
-|Generable Word (`u$`)|`P₍$₎(u) > 0` (palabra finalizada)|"Terminating path"|
+| Término              | Condición                            | Analogía           |
+| -------------------- | ------------------------------------ | ------------------ |
+| Generable Prefix (u) | $P(u) > 0$                           | "Reachable"        |
+| Generable Word (u$)  | $P_{\$}(u) > 0$ (palabra finalizada) | "Terminating path" |
 
 ✅ Aceptada por todos los participantes. Útil para interpretar prefijos y finales en autómatas probabilísticos o modelos generativos.
 
@@ -145,10 +142,10 @@ Propuesta de distinción útil en el análisis:
 
 ### 🧾 Decisión:
 
-Para la congruencia asociada a `1_L` (función indicadora de aceptación), **se mantiene la precondición de igualdad de soporte completo**.
+Para la congruencia asociada a $1_L$ (función indicadora de aceptación), **se mantiene la precondición de igualdad de soporte completo**. 
+$\text{supp}(\rho) = \text{supp}(\rho')$
 
 - Aunque dos distribuciones puedan coincidir en su `top_k`, si sus soportes globales difieren, **no se consideran equivalentes bajo esta congruencia**.
-    
 - Esta es una elección **consciente y deliberada**, que prioriza:
     
     - Coherencia algebraica
