@@ -171,14 +171,11 @@ $\text{supp}(\rho) = \text{supp}(\rho')$
 ### ❓ ¿Qué significa realmente que dos distribuciones sean "equivalentes"?
 
 - ¿Debe esa equivalencia preservar información estructural completa (como el soporte)?
-    
 - ¿O basta con que preserven propiedades funcionales específicas (como el top-k para una tarea de clasificación)?
-    
 
 ### ❓ ¿Hasta qué punto las definiciones matemáticas deben adaptarse a las necesidades de implementación?
 
 - ¿Es válido ajustar una definición teórica si eso facilita una implementación más robusta, eficiente o útil en la práctica?
-    
 
 ---
 
@@ -187,14 +184,11 @@ $\text{supp}(\rho) = \text{supp}(\rho')$
 ### ❓ ¿Debe la equivalencia `top_k` depender del soporte completo?
 
 - En muchos casos reales (e.g., sampling, generación de texto), **solo importa el top-k con probabilidad positiva**. ¿Tiene sentido exigir igualdad de soporte completo?
-    
 
 ### ❓ ¿Cómo afecta esta definición a tareas downstream?
 
 - Por ejemplo: ¿Dos vectores que difieren solo en símbolos muy improbables deben considerarse distintos?
-    
 - ¿Qué impacto tiene eso en cuantización, clustering o reducción de modelos?
-    
 
 ---
 
@@ -203,12 +197,10 @@ $\text{supp}(\rho) = \text{supp}(\rho')$
 ### ❓ ¿Podríamos definir una familia de equivalencias parametrizadas?
 
 - Por ejemplo, `EquivTopK_strict` (requiere igualdad de soporte) vs `EquivTopK_loose` (ignora soporte y se enfoca solo en top-k).
-    
 
 ### ❓ ¿Queremos que las particiones sean _compatibles entre sí_?
 
 - Es decir, ¿deberíamos exigir que dos particiones (top-k y cuantización, por ejemplo) se puedan comparar o componer coherentemente?
-    
 
 ---
 
