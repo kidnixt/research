@@ -1,152 +1,103 @@
-### 🧠 ¿Qué está pasando?
+# 📘 Reporte Técnico: Consistencia entre Wrapper Qwen3 y Muestreo Autoregresivo
 
-Tu código de sampleo hace esto:
+## 1. 🧠 Contexto
 
-- A cada paso, toma el último token (`probs = softmax(logits[:, -1, :])`).
-- Filtra únicamente los tokens `"0"` a `"9"` (y opcionalmente `eos`).
-- Luego samplea **por token individual**, y repite.
+Se trabaja con el modelo Qwen3-1.7B para generar números flotantes entre 0 y 1, y analizar la distribución probabilística de los dígitos generados.
 
-🔴 **Pero aquí está el punto crítico**:
+Para ello, se usan dos métodos:
 
-El modelo **no genera dígitos como tokens individuales en todos los casos**. Algunos números como `"10"` o `"9"` pueden estar **tokenizados como un solo token** dependiendo del tokenizer de Qwen. Si tú sampleás por tokens individuales, pero luego decodificás (como si fueran caracteres), introduces un sesgo.
+- Un **wrapper probabilístico** que implementa la interfaz `ProbabilisticModel` de Pythautomata, para calcular probabilidades token a token de forma exacta y formal.
+- Un **script de muestreo autoregresivo** que genera secuencias paso a paso desde el modelo.
 
-
-### ✅ Solución: Samplear secuencias de dígitos como en el wrapper
-
-Vamos a replicar exactamente lo que hacés cuando calculás las probabilidades como en el wrapper:
-
-1. **Tokenizás los strings `"0"` a `"9"`** como palabras, y te fijás cuáles tokens los componen.
-2. Luego calculás su probabilidad como el producto de probabilidades **secuenciales**, no independientes.
-3. El wrapper considera **palabras completas** y su secuencia de tokens.
+Ambos métodos deberían producir distribuciones consistentes, ya que reflejan el mismo proceso generativo autoregresivo.
 
 ---
 
-La diferencia entre "como se hacía antes" (calculando las probabilidades de todos los tokens en una sola pasada del modelo) y "como se hace ahora" (paso a paso, token a token) es **más que una cuestión de consistencia**: es una diferencia fundamental en términos de **precisión, control y fidelidad al comportamiento autoregresivo del modelo**.
+## 2. 🔍 Problema Detectado
 
-## 🔍 Comparación de técnicas
+El muestreo original del script:
 
-|Criterio|Técnica "antes" (una sola pasada)|Técnica "ahora" (paso a paso, token por token)|
+- Obtiene los logits del último token y calcula su softmax.
+- Filtra tokens permitidos (`"0"` a `"9"` y `<eos>`).
+- **Pero no renormaliza** las probabilidades tras filtrar el vocabulario.
+- Luego muestrea el siguiente token basado en esas probabilidades no normalizadas.
+
+Este procedimiento causa que la distribución del dígito siguiente (p.ej. primer dígito tras un punto decimal) no coincida con la distribución real implícita por el modelo ni con la calculada por el wrapper.
+
+### Hist LM
+![[Pasted image 20250618143844.png]]
+
+### Hist PDFA
+
+![[Pasted image 20250618143924.png]]
+
+
+### Printeo de probs después del prompt "."
+
+Se aprecia que no coincide con el histograma del LM
+
+![[Pasted image 20250618144004.png]]
+
+---
+
+## 3. ✅ Solución Implementada
+
+Para alinear el muestreo con el wrapper se corrigió el script para que:
+
+- Después de filtrar los tokens de interés, se **renormalicen las probabilidades** (softmax solo sobre los logits filtrados).
+- El muestreo se haga a partir de esta distribución correcta, que suma 1 sobre el conjunto restringido.
+- Se samplea token a token, reflejando la naturaleza autoregresiva exacta del modelo.
+
+---
+
+## 4. 🧠 Por qué el wrapper es correcto
+
+El wrapper sigue este enfoque:
+
+- Dado un prefijo, construye la secuencia de entrada completa y consulta la distribución del siguiente token.
+- Considera el alfabeto restringido (`"0"`-`"9"` + `<eos>`).
+- Calcula la probabilidad de cada símbolo como producto de probabilidades de sus tokens (en caso de símbolos multitérmino).
+- Renormaliza correctamente las probabilidades sobre el alfabeto.
+- Así obtiene probabilidades condicionales exactas, compatibles con la definición formal de un modelo probabilístico autoregresivo.
+
+---
+
+## 5. ⚖️ Comparación técnica entre enfoques
+
+|Aspecto|Muestreo Original (una pasada)|Muestreo Corregido (token a token)|
 |---|---|---|
-|**Fidelidad al sampling autoregresivo**|❌ Baja — no refleja cómo el modelo genera texto|✅ Alta — exactamente como el modelo genera texto|
-|**Consistencia con `ProbabilisticModel`**|❌ No es compatible|✅ Compatible|
-|**Interpretabilidad**|❌ Difusa — se mezclan logits de distintos tokens|✅ Clara — logits precisos del siguiente token|
-|**Control sobre el proceso**|❌ Difícil de modificar o debuggear|✅ Cada paso es claro, intervenible|
-|**Costo computacional**|✅ Más eficiente (una sola inferencia)|❌ Más costoso (una inferencia por token)|
-|**Escalabilidad**|✅ Más rápido en batch|❌ Más lento, pero más preciso|
-
-## 🧠 ¿Cuál es mejor?
-
-**Para tu caso actual**, en el que:
-
-- Quieres comparar distribuciones empíricas con probabilidades exactas.
-- Estás trabajando con un wrapper tipo `ProbabilisticModel`.
-- Necesitás que el muestreo refleje las probabilidades reales.
-- Estás haciendo investigación/análisis fino del modelo.
-
-👉 **La técnica paso a paso (token a token) es claramente mejor.**
+|Fidelidad al proceso autoregresivo|❌ Baja — no refleja generación real|✅ Alta — refleja generación exacta|
+|Renormalización post-filtrado|❌ No hay|✅ Sí|
+|Consistencia con wrapper|❌ No|✅ Sí|
+|Interpretabilidad|❌ Difusa|✅ Clara|
+|Costo computacional|✅ Más eficiente|❌ Más costoso|
 
 ---
 
-## ⚠️ ¿Cuándo usar la versión "rápida" (una sola pasada)?
+## 6. 🎯 Conclusión
 
-- Si solo te interesa generar texto rápidamente (sin estudiar las probabilidades internas).
-- Si no necesitas precisión token a token, sino simplemente muestras completas.
-- Si estás generando texto largo en producción.
+Para análisis fino, interpretación formal y comparación con autómatas estocásticos:
 
-En esos casos, sacrificar algo de precisión puede valer la pena por la eficiencia.
-
----
-
-### 🧠 ¿Cuál técnica es mejor?
-
-#### ✅ Técnica actual (wrapper-style):
-
-- ✔️ Calcula correctamente las probabilidades de salida **condicionales** basadas en todo el historial anterior.
-- ✔️ Refleja lo que el modelo realmente "piensa" que debería venir después.
-- ✅ Es la forma **teóricamente correcta** de evaluar modelos autoregresivos token por token.
-- ❌ Ligeramente más costosa computacionalmente que usar solo el último logit (pero mucho más precisa).
-
-#### 🆚 Técnica anterior (solo `logits[:, -1, :]`):
-
-- ❌ Ignora tokens anteriores si no se usa correctamente el contexto total.
-- ❌ Puede dar probabilidades inconsistentes si hay ambigüedad en el token que sigue.
-- ❌ No coincide con lo que hace el wrapper ni el cálculo completo.
-
-
-# 📘 Reporte Técnico: Consistencia de Probabilidades entre el Wrapper de Qwen3 y el Muestreo Autoregresivo
-
-## 1. Introducción
-
-En este proyecto se utiliza el modelo de lenguaje Qwen3-1.7B para generar números flotantes entre 0 y 1. Para analizar su comportamiento probabilístico, se emplean dos enfoques complementarios:
-
-- Un **wrapper probabilístico** que implementa la interfaz de `Pythautomata` para extraer modelos estocásticos (como un PDFA).
-- Un **script de muestreo autoregresivo**, que genera muestras directamente desde el modelo LLM.
-
-Ambas estrategias deberían reflejar el mismo proceso subyacente de generación. Sin embargo, inicialmente se observó una **inconsistencia significativa** entre las distribuciones resultantes, lo que motivó un análisis técnico y una corrección del procedimiento de muestreo.
+- **El muestreo token a token con renormalización** es fundamental para asegurar que las distribuciones reflejen fielmente lo aprendido por el modelo.
+- Usar probabilidades sin renormalizar tras filtrado genera sesgos que distorsionan el análisis.
+- El wrapper implementa el método teóricamente correcto, y el muestreo debe replicar su lógica para ser consistente.
 
 ---
 
-## 2. ¿Cómo calcula probabilidades el wrapper?
+## 7. ⚠️ Cuándo usar la versión rápida sin token por token
 
-El wrapper para Qwen3 implementado sigue una lógica detallada y rigurosa para obtener probabilidades condicionales:
-
-- Dado un prefijo (por ejemplo, `"0."`, `"0.3"`, etc.), se construye una secuencia de entrada completa concatenando un *prompt fijo* con el prefijo observado.
-- El wrapper consulta al modelo Qwen3 para obtener la distribución de probabilidad del siguiente token.
-- Luego, filtra únicamente los tokens relevantes para el alfabeto de interés: los dígitos `"0"` a `"9"` y el token de fin de secuencia (`<|endoftext|>`).
-- Para cada símbolo del alfabeto, calcula su probabilidad en función del token ID correspondiente, considerando penalizaciones en caso de que esté compuesto por múltiples sub-tokens.
-  
-Este enfoque es **determinista, explícito y renormaliza correctamente** las probabilidades sobre el conjunto relevante de símbolos, asegurando que se interprete al modelo como una distribución válida para el análisis formal.
+- Generación de texto rápida en producción, sin necesidad de analizar probabilidades precisas.
+- Cuando no interesa la interpretación token a token, sino solo muestras completas.
+- Para grandes volúmenes donde la eficiencia es prioritaria frente a la exactitud fina.
 
 ---
 
-## 3. ¿Qué problema se detectó en el muestreo original desde Qwen3?
+## 8. 🔑 Recomendación final
 
-El script de muestreo original realizaba un proceso autoregresivo, generando números paso a paso. En cada paso:
+Siempre que se muestree restringiendo el vocabulario, **renormalizar explícitamente las probabilidades** sobre el subconjunto seleccionado es imprescindible para garantizar:
 
-- Obtenía los logits del último token del modelo.
-- Aplicaba `softmax` para obtener probabilidades.
-- Filtraba los tokens correspondientes a los dígitos y al fin de secuencia.
-- Realizaba una muestra aleatoria según esas probabilidades.
+- Consistencia con el modelo.
+- Interpretabilidad formal.
+- Validez estadística.
 
-El problema fundamental estaba en que **las probabilidades no se renormalizaban** tras el filtrado. Es decir, se tomaban las probabilidades directamente del `softmax` general, sin ajustar para que sumaran 1 dentro del subconjunto relevante.
-
-Esto provocaba que la muestra se hiciera sobre una distribución **sesgada**, donde los valores eran proporcionales a las probabilidades "crudas" del modelo, pero **no reflejaban correctamente la distribución condicional sobre el conjunto `{0–9, <eos>}`**.
-
----
-
-## 4. Descubrimiento de la inconsistencia
-
-Para verificar la validez de ambos enfoques, se realizó un experimento comparativo:
-
-- Se evaluó la distribución del primer dígito después de un punto decimal (`"."`) usando el wrapper (`last_token_probability`).
-- Luego, se generaron múltiples muestras desde el modelo autoregresivamente, registrando el primer dígito generado.
-  
-Los resultados mostraron que **las distribuciones eran diferentes**, confirmando que el script de muestreo no estaba reproduciendo la misma distribución aprendida por el modelo que el wrapper sí capturaba correctamente.
-
----
-
-## 5. Solución implementada
-
-Se ajustó el script de muestreo para replicar exactamente el mismo procedimiento del wrapper:
-
-- Se filtran los logits del modelo para quedarse únicamente con los correspondientes a los tokens del alfabeto.
-- Se aplica `softmax` **solamente sobre esos logits filtrados**, asegurando que la distribución resultante esté renormalizada y sume exactamente 1.
-- Las muestras se generan a partir de esta distribución válida, en concordancia con lo que hace el wrapper.
-
-Con esta corrección, las distribuciones obtenidas por el script de muestreo comenzaron a coincidir casi exactamente con las del wrapper.
-
----
-
-## 6. Conclusiones
-
-- El enfoque del **wrapper** es más adecuado para representar la distribución aprendida por el modelo sobre un alfabeto restringido, porque **renormaliza correctamente** y se ajusta a un marco formal.
-- El muestreo original era incorrecto desde el punto de vista probabilístico, ya que usaba probabilidades sin renormalizar tras el filtrado.
-- El nuevo muestreo corrige esto, replicando el procedimiento del wrapper y garantizando **consistencia en el análisis y la generación**.
-- Esta corrección es fundamental cuando se desea interpretar los comportamientos del modelo a través de autómatas estocásticos u otras herramientas formales.
-
----
-
-## 7. Recomendación
-
-Se recomienda que **todo procedimiento de muestreo que se base en subconjuntos del vocabulario del modelo realice una renormalización explícita** de las probabilidades, tal como lo hace el wrapper de Qwen3. Esto asegura consistencia, interpretabilidad y fidelidad al modelo subyacente.
-
+Este principio fue confirmado y aplicado con éxito al corregir el script de muestreo para que coincida con el wrapper de Qwen3.
