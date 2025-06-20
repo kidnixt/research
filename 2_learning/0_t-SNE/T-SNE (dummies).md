@@ -1,4 +1,4 @@
-# t-Distributed Stochastic Neighbor Embedding
+# t-Distributed Stochastic Neighbor Embedding (para dummies)
 
 ## 🧩 Paso 1: ¿Qué es t-SNE y para qué sirve?
 
