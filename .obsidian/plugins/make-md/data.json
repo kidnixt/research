@@ -43,7 +43,9 @@
     "//Tags",
     "//2_seminario",
     "//2_learning",
-    "//2_learning/2_learning/0_t-SNE"
+    "//2_learning/2_learning/0_t-SNE",
+    "//0_papers",
+    "//1_papers_review"
   ],
   "expandFolderOnClick": true,
   "spacesFolder": "Tags",
