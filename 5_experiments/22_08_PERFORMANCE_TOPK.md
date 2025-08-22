@@ -43,3 +43,31 @@ Con un PDFA de **250 estados nominales**, el algoritmo `PDFAQuantizationNAryTr
 - Se aplica **DURANTE** el algoritmo de aprendizaje
 - Pero puede que se aplique solo en ciertos puntos, no en todos
 - O puede que haya múltiples instancias del partitioner
+
+
+### **SyncronicModelGuidedLanguageModel:**
+
+- Se ejecuta **ANTES** del algoritmo de aprendizaje
+- Cada vez que el teacher hace una consulta, el SyncronicModel ya devuelve **máximo topK opciones**
+- El algoritmo de aprendizaje **nunca ve** las otras opciones
+
+### **TopKZeroedProbabilityPartitioner:**
+
+- Se ejecuta **DURANTE** el algoritmo de aprendizaje
+- El teacher ya recibió **todas las probabilidades** del modelo original
+- Tu partitioner solo las filtra para **comparación**, pero el modelo ya se construyó con toda la información
+
+## **La secuencia real es:**
+
+### **Caso SyncronicModel (funciona):**
+
+1. Teacher consulta → SyncronicModel aplica topK → Devuelve solo 2 opciones
+2. Algoritmo construye modelo con esas 2 opciones
+3. **Resultado: máximo 2 transiciones**
+
+### **Caso TopKPartitioner (no funciona como esperabas):**
+
+1. Teacher consulta → Modelo original devuelve 10 opciones
+2. Algoritmo construye modelo con esas 10 opciones
+3. Partitioner filtra solo para comparación interna
+4. **Resultado: modelo tiene las 10 transiciones originales**
