@@ -29,3 +29,17 @@ Con un PDFA de **250 estados nominales**, el algoritmo `PDFAQuantizationNAryTr
     - I/O y gestión de estructuras de datos
 2. **El particionado representa <0.05% del tiempo total** (como vimos antes)
 3. **Para modelos de este tamaño**, las diferencias en sparsity no impactan significativamente la complejidad algorítmica
+
+
+## MMMM
+### **SyncronicModelGuidedLanguageModel con `top_k=2`:**
+
+- Aplica topK **ANTES** de que llegue al algoritmo de aprendizaje
+- El modelo ya viene "pre-particionado" con máximo 2 opciones
+- El learner recibe datos ya filtrados
+
+### **TopKZeroedProbabilityPartitioner con `k=1`:**
+
+- Se aplica **DURANTE** el algoritmo de aprendizaje
+- Pero puede que se aplique solo en ciertos puntos, no en todos
+- O puede que haya múltiples instancias del partitioner
