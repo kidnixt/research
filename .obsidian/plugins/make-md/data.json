@@ -45,7 +45,9 @@
     "//2_learning",
     "//2_learning/2_learning/0_t-SNE",
     "//0_papers",
-    "//1_papers_review"
+    "//1_papers_review",
+    "//2_learning/2_learning/1_PCA",
+    "//3_resources"
   ],
   "expandFolderOnClick": true,
   "spacesFolder": "Tags",
