@@ -44,7 +44,8 @@
     "//2_seminario",
     "//2_learning/2_learning/0_t-SNE",
     "//2_learning/2_learning/1_PCA",
-    "//6_walkthrough"
+    "//6_walkthrough",
+    "//5_experiments"
   ],
   "expandFolderOnClick": true,
   "spacesFolder": "Tags",
