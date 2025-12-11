@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "5_experiments/14_09_WORKFLOW_PDFA.md",
+                "file": "3_resources/QWEN-1.7B.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "14_09_WORKFLOW_PDFA"
+              "title": "QWEN-1.7B"
             }
           }
         ]
@@ -75,16 +75,13 @@
             }
           },
           {
-            "id": "b7e2ea5092e8eecd",
+            "id": "6d96c206e33d9b3c",
             "type": "leaf",
             "state": {
-              "type": "file-explorer",
-              "state": {
-                "sortOrder": "alphabetical",
-                "autoReveal": false
-              },
-              "icon": "lucide-folder-closed",
-              "title": "Files"
+              "type": "mk-path-view",
+              "state": {},
+              "icon": "layout-grid",
+              "title": "Navigator"
             }
           }
         ],
@@ -195,22 +192,22 @@
   },
   "active": "b311973df2af2c4c",
   "lastOpenFiles": [
+    "4_discussions/17_06_ME_PROBS_QWEN3.md",
+    "5_experiments/5_experiments.md",
     "5_experiments/14_09_PDFA_PERFOMANCE.md",
     "5_experiments/14_09_WORKFLOW_PDFA.md",
-    "5_experiments/5_experiments.md",
     "5_experiments/22_08_PERFORMANCE_TOPK.md",
+    "3_resources/QWEN-1.7B.md",
+    "3_resources/3_resources.md",
     "6_walkthrough/BACKPROP_GEMINI.md",
     "6_walkthrough/6_walkthrough.md",
     "6_walkthrough",
     "4_discussions/17_06_MEET_VICTOR.md",
-    "4_discussions/17_06_ME_PROBS_QWEN3.md",
     "1_papers_review/1_papers_review.md",
     "2_learning/1_PCA/PCA.md",
     "2_learning/0_t-SNE/T-SNE (REAL).md",
     "4_discussions/4_discussions.md",
     "5_experiments",
-    "3_resources/QWEN-1.7B.md",
-    "3_resources/3_resources.md",
     "2_learning/1_PCA/1_PCA.md",
     "2_learning/0_t-SNE/T-SNE (dummies).md",
     "1_papers_review/KOO_LIU_AUTOMATA_BASED_LLM2024.md",
