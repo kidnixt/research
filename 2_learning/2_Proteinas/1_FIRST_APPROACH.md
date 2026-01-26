@@ -14,21 +14,74 @@ Solo una vez entendidas estas correspondencias —y, especialmente, sus límites
 
 ## 2. ¿Qué está midiendo realmente el score?
 
-El score que producen este tipo de modelos **no es una medición directa de una propiedad física o bioquímica**, ni una simulación explícita del comportamiento de la proteína en condiciones experimentales. En particular, el score **no mide directamente** estabilidad termodinámica, energía libre de plegamiento, actividad catalítica, cinética enzimática ni resistencia a condiciones fisicoquímicas como temperatura o pH.
+SaProt define el efecto de una mutación mediante un **log odds ratio**, comparando la probabilidad asignada por el modelo a la secuencia mutada frente a la secuencia _wild-type_, **desde una perspectiva evolutiva**, no experimental.
 
-A nivel conceptual, el score refleja qué tan **compatible o plausible** resulta una mutación dentro del espacio de secuencias y estructuras que el modelo ha aprendido durante su entrenamiento. El modelo ha sido expuesto a grandes conjuntos de proteínas naturales y ha internalizado patrones estadísticos que relacionan secuencias, entornos estructurales y tipos de residuos. Cuando se evalúa una mutación, el score cuantifica hasta qué punto ese cambio encaja o no con esos patrones aprendidos.
+Tal como indica explícitamente la documentación oficial de SaProt:
 
-En ese sentido, el score puede interpretarse como una medida de **consistencia estadística**: mutaciones que preservan configuraciones frecuentes o esperadas en proteínas reales tienden a recibir mejores scores, mientras que mutaciones que introducen combinaciones raras, atípicas o contradictorias con el contexto estructural suelen ser penalizadas. Esto incluye factores como el tipo de aminoácido en una posición determinada, el entorno local en la estructura, y señales implícitas de conservación evolutiva.
+> _“A positive score means the mutation is better than the wild type from an evolution perspective (the larger the better).”_
 
-Lo que el score **sí captura**, de manera indirecta, es información relacionada con:
+Esto implica que el score cuantifica **cuán compatible es una mutación con los patrones estadísticos aprendidos por el modelo**, que reflejan **presiones evolutivas implícitas en los datos de entrenamiento**, y **no** propiedades físicas directas como:
 
-- la compatibilidad de un residuo con un entorno estructural específico,
-- la frecuencia con la que mutaciones similares aparecen en proteínas naturales,
-- patrones evolutivos aprendidos a partir de grandes bases de datos.
+- estabilidad estructural real,
+- energía libre de plegamiento,
+- actividad catalítica,
+- afinidad de unión,
+- o fitness biológico medido experimentalmente.
 
-Sin embargo, el score **no distingue explícitamente** entre distintos mecanismos físicos. Por ejemplo, no separa si una penalización se debe a un problema de plegamiento global, a una perturbación local del sitio activo, o a un efecto funcional más sutil. Todos estos factores quedan colapsados en una única métrica estadística.
+En otras palabras, el score responde a la pregunta:
 
-Por esta razón, un score desfavorable **no implica necesariamente** que una proteína no se pliegue, que sea inestable o que pierda completamente su función. Del mismo modo, un score favorable no garantiza que una mutación mejore ninguna propiedad experimentalmente medible. El valor del score reside en su uso **comparativo y contextual**, no en su interpretación como una predicción directa de comportamiento físico.
+> _“¿Qué tan plausible le resulta esta mutación al modelo, dado el contexto secuencial y estructural, en comparación con el residuo original?”_
 
-En resumen, el score debe entenderse como una señal informativa sobre cómo una mutación se posiciona dentro del espacio de proteínas que el modelo considera “naturales” o “plausibles”. Su utilidad depende de una interpretación cuidadosa, de comparaciones controladas y, en última instancia, de su contraste con datos experimentales reales. El modelo no reemplaza al experimento: como mucho, ayuda a formular preguntas más informadas.
 
+---
+
+### Formulación del score: log odds ratio
+
+SaProt adopta como base la formulación propuesta por **Meier et al.**, donde el efecto mutacional se expresa como una suma de diferencias de log-probabilidades entre mutante y _wild-type_ en las posiciones mutadas.
+
+La idea central es sencilla pero potente:  
+si el modelo asigna **mayor probabilidad** al residuo mutado que al original, **en el mismo contexto**, entonces la mutación es considerada “mejor” **desde la perspectiva del modelo**.
+
+Sin embargo, SaProt introduce una modificación clave respecto a la formulación original, debido a que **su vocabulario no es solo secuencial**, sino **estructura-aware**.
+
+Esto nos lleva a un punto crítico de interpretación.
+
+---
+
+### ¿Por qué el score de SaProt no es simplemente “log-likelihood”?
+
+Aunque el score se construye a partir de log-probabilidades, **no debe interpretarse como una log-likelihood global de la proteína**, ni como una energía, ni como una probabilidad normalizada de que la proteína exista.
+
+En particular:
+
+- El score **solo compara mutante vs wild-type**, no evalúa la proteína en aislamiento.
+- El contexto se mantiene fijo ($x_{\setminus T}$), lo que refuerza que es una **comparación local condicionada**.
+- En SaProt, la probabilidad de un residuo **se obtiene sumando probabilidades de múltiples tokens estructurales**, no de un único token.
+
+
+
+---
+
+### Qué **NO** estamos afirmando con este score
+
+Para evitar interpretaciones incorrectas, dejamos explícitamente establecido que **en este trabajo**:
+
+- ❌ No afirmamos que una mutación con score positivo sea más estable termodinámicamente
+- ❌ No afirmamos mejora funcional
+- ❌ No afirmamos ventaja evolutiva real en un organismo
+- ❌ No validamos el score contra datos experimentales
+
+Lo único que afirmamos es:
+> **El score de SaProt refleja una preferencia estadística del modelo, aprendida a partir de datos evolutivos y estructurales, condicionada al contexto de la proteína.**
+
+---
+### Por qué aun así el score es útil
+
+A pesar de estas limitaciones, este tipo de score es extremadamente útil como:
+
+- **herramienta exploratoria**,
+- **prior computacional**,
+- **filtro inicial de mutaciones**,
+- o señal comparativa en estudios _in silico_.
+
+Especialmente en escenarios de **zero-shot prediction**, el score permite identificar mutaciones que el modelo considera más compatibles con el espacio de proteínas “naturales” que ha aprendido.
