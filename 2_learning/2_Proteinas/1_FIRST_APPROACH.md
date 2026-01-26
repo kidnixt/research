@@ -59,7 +59,6 @@ En particular:
 - En SaProt, la probabilidad de un residuo **se obtiene sumando probabilidades de múltiples tokens estructurales**, no de un único token.
 
 
-
 ---
 
 ### Qué **NO** estamos afirmando con este score
@@ -85,3 +84,8 @@ A pesar de estas limitaciones, este tipo de score es extremadamente útil como:
 - o señal comparativa en estudios _in silico_.
 
 Especialmente en escenarios de **zero-shot prediction**, el score permite identificar mutaciones que el modelo considera más compatibles con el espacio de proteínas “naturales” que ha aprendido.
+
+
+
+---
+
