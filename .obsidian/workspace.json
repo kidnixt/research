@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "2_learning/2_Proteinas/INTRO.md",
+                "file": "2_learning/2_Proteinas/1_FIRST_APPROACH.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "INTRO"
+              "title": "1_FIRST_APPROACH"
             }
           }
         ]
@@ -192,7 +192,8 @@
   },
   "active": "b311973df2af2c4c",
   "lastOpenFiles": [
-    "2_learning/2_Proteinas/INTRO.md",
+    "2_learning/2_Proteinas/0_INTRO.md",
+    "2_learning/2_Proteinas/1_FIRST_APPROACH.md",
     "2_learning/2_Proteinas/2_Proteinas.md",
     "1_papers_review/BRAVERMAN_2025.md",
     "2_learning/2_Proteinas",
@@ -231,7 +232,6 @@
     "2_learning/0_t-SNE/0_t-SNE.md",
     "2_learning/Untitled.md",
     "Tags/Untitled.md",
-    "README.md",
     "images/Pasted image 20250613102054.png"
   ]
 }
